@@ -1,0 +1,9 @@
+- Klasör yap?s? > Notu tamamla
+- Tag helperslar
+- Route ayarlar?
+- Views içinde kullan?lan ortak using ifadelerini tek dosya halinde yazma
+- Ajax ile validation konrolü burda da var m?? 
+- Startup.cs içindeki metotlar?n ayr?nt?l? anlamlar?
+- Giri? k?sm?ndaki npm k?sm? tamamlanacak.
+
+* Validation ifadeleri ayn? - Kontrol et

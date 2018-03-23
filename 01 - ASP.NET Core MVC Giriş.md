@@ -76,18 +76,25 @@ namespace WebApplication1
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Mvc servisini aktifleştiriyoruz.
             services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            // Sadece development adımında aktif olmasını istediğimiz kısımları buraya yazıyoruz.
+            if (env.IsDevelopment()) 
             {
+                // Hata gösterimini açan metottur.
                 app.UseDeveloperExceptionPage();
             }
 
+            // wwwroot dizini altındaki statik dosyaları kullanmamızı sağlar.
             app.UseStaticFiles();
 
+            // MVC yapımız için default bir route tanımlaması yaparız.
+            // Başka bir yöntem olarak aşağıdaki ifade de kullanılabilir.
+            // app.UseMvcWithDefaultRoute();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -107,3 +114,47 @@ namespace WebApplication1
     - Js, css ve resim dosyaları burada bulunur.
     - Bu kısmı erişime açmak için `Startup.cs` dosyası içindeki `Configure` metodunun içine aşağıdaki kod satırı girilmelidir.
         - `app.UseStaticFiles();`
+
+### 06) Paket Yönetimi
+
+#### NuGet Package Manager
+- .NET Framework yapısında biz paketleri Nuget Manager ile indiriyorduk ve temel paketlerin hepsi ayrı ayrı indiriliyordu.
+- .NET Core ile birlikte, bu temel paketlerin hepsi tek bir paket altında toplanıp projeye dahil edilmiştir.
+- Bu paketi `Dependencies > NuGet > Microsoft.AspNetCore.All` altından görebiliriz.
+- Bu paketler internet üzerinden indirilmiş değildir, sadece referans olarak durmaktadırlar.
+- Proje içinde kullanılan paketler otomatik algılanıp, publish edildiğinde sadece bu paketlerin dll dosyaları projeye dahil edilecektir.
+- Bu paketlerin ayar dosyasını, projeye sağ tıklayıp `Edit <proje_ismi>.csproj` altında da düzenleyebiliriz.
+
+#### Bower Package Manager
+- Harici paketleri NuGet ile kurmanın yanında, .NET Core ile gelen başka bir paket yöneticisi olan `Bower` paket yöneticisiyle de paketleri kurabiliriz.
+- `Project > Manage Bower Packages...` yolunu kullanarak bower paketlerini yükleyebiliriz.
+- Bunun dışında manuel olarak da yükleme yapılabilir.
+- Bunun için yapmamız gereken, öncelikle `bower.json` dosyasını oluşturmaktır.
+- Projeye sağ tıklayıp `Add > New Item > Json File` kısmından `bower.json` isminde bir dosya ekliyoruz.
+- Dosyanın içine aşağıdaki örnek kodları ekliyoruz.
+
+```json
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "4.0.0"
+  }
+}
+```
+
+- Tüm kullanılabilir bower paketleri için : https://bower.io/search/ 
+- Dosyayı kaydettiğimiz zaman otomatik olarak paketler projeye eklenecektir.
+- Eklenen paketleri `Dependences > Bower` altından görebiliriz.
+- Projeye eklenen dosyaların statik dizin altında bulunması için;
+    - Projeye sağ tıklayıp `Add > New Item > Json File` kısmından `.bowerrc` isminde bir dosya ekliyoruz.
+    - Dosyanın içine aşağıdaki örnek kodları ekliyoruz.
+
+```json
+{
+  "directory": "wwwroot/lib"
+}
+```
+
+#### Node Package Manager (NPM)
+- Eklenecek.

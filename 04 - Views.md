@@ -42,3 +42,14 @@ else
     - Shared içinde veya kendi klasörünün altında direk isim yazarak çağırılabilir.
     - Diğer klasörlerin altında ise tam yol belirtilmesi zorunludur.
 - Partial çekilirken, partial’a bir model gönderilerek de çekilebilir.
+
+### 7) _ViewImports.cshtml Dosyası
+- Views içerisinde kullanacağımız using ifadeleri global olarak tanımlamak için kullanılır.
+- Views dizini altında oluşturulur ve ismi sabittir.
+- İçerisindeki ifadeler başında @ işaretiyle yazılır.
+
+```cs
+@using Project.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+...
+```
