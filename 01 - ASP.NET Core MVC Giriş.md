@@ -1,10 +1,13 @@
 ## ASP .NET Core MVC PROGRAMLAMAYA GİRİŞ
 
-### 1) .NET Core ile .NET Framework Arasındaki Farklar
+### 01) .NET Core ile .NET Framework Arasındaki Farklar
 
 - Eklenecek
+- Artık Core yapısı içinde özel dizinler bulunmamaktadır. (Örn: App_Code, App_Data vs.)
+- Core yapısı içinde eskiden kullanılan html helper metotlar yerine `TagHelpers`'lar ve `ViewComponents` yapıları gelmektedir.
+- Statik dosya yapısı `wwwroot` dizini içine taşınmıştır.
 
-### 2) Core Geliştirme Ortamları
+### 02) Core Geliştirme Ortamları
 
 - Windows
     - Visual Studio 2017 veya 2015
@@ -29,7 +32,7 @@
     <img src="assets/02.png" style="max-height:250px" />
 </p>
 
-### 3) MVC Pattern Nedir?
+### 03) MVC Pattern Nedir?
 
 - Design Pattern
 - Kurallar düzenidir / Kalıptır.
@@ -41,7 +44,7 @@
     <img src="assets/01.png" style="max-height:250px" />
 </p>
 
-### 4) İlk Projeyi Oluşturma
+### 04) İlk Projeyi Oluşturma
 
 - Visual Studio ile örnek proje açma
 - VS Code ile proje oluşturma (Terminal üzerinden)
@@ -51,8 +54,6 @@
         - Seçili şablon dosyalarını oluşturur.
     - `dotnet run`
         - Projeyi çalıştırır.
-- Projenin dosya düzeni
-    - Eklenecek
 - İlk projenin ayarlamalarının yapılması ve basit bir MVC sayfası
 - İlk ayarlamada `Startup.cs` dosyasının içeriği aşağıdaki gibi olmalıdır:
 
@@ -97,3 +98,12 @@ namespace WebApplication1
     }
 }
 ```
+
+### 05) Projenin Dosya Düzeni
+- Controllers, Views, Models
+    - MVC yapısındaki dizinlerdir.
+- `wwwroot`
+    - Bu dosya, bizim statik dosyalarımızın bulunduğu alandır.
+    - Js, css ve resim dosyaları burada bulunur.
+    - Bu kısmı erişime açmak için `Startup.cs` dosyası içindeki `Configure` metodunun içine aşağıdaki kod satırı girilmelidir.
+        - `app.UseStaticFiles();`
