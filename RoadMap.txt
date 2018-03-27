@@ -1,9 +1,18 @@
-- Klas�r yap?s? > Notu tamamla
+- Klasör yapısı > Notu tamamla
 - Tag helperslar
-- Route ayarlar?
-- Views i�inde kullan?lan ortak using ifadelerini tek dosya halinde yazma
-- Ajax ile validation konrol� burda da var m?? 
-- Startup.cs i�indeki metotlar?n ayr?nt?l? anlamlar?
-- Giri? k?sm?ndaki npm k?sm? tamamlanacak.
+- Ajax ile validation konrolü burda da var m?? 
+- Startup.cs içindeki metotların ayrıntılı anlamları
+- Giriş kısmındaki kullanılabilir paket yöneticileri notu tamamlanacak.
+- asp.net kısmına ado.net ile ilgili notlar eklenecek.
 
-* Validation ifadeleri ayn? - Kontrol et
+- Migration işlemlerinin otomatik hale getirilmesi
+    - Program içinde otomatik olarak migration ve update database nasıl yapılır? 
+    - Tüm migration kodlarına bakılıp notlara eklenecek
+
+- Settings dosyalarının yapılandırılması
+    - https://www.c-sharpcorner.com/article/all-about-appsettings-json-in-asp-net-core-2-0/
+    - DB bağlantı stringinin appsettings içinden çekilmesi ve notlara eklenmesi
+
+- Database oluştururken virtual kullanımı ve nullable halen var mı ? 
+
+* Validation ifadeleri aynı - Kontrol et
