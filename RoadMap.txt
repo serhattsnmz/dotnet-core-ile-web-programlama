@@ -16,8 +16,12 @@
 - Database oluştururken virtual kullanımı ve nullable halen var mı ? 
 
 - Dependecy Injection için not oluşturulacak.
+    - https://medium.com/@atarikguney/dependency-injection-nedir-1124c15249ad 
 
 * Validation ifadeleri aynı - Kontrol et
+
+- EF Core dökümanı ayrıntılı okunacak.
+    - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
 
 // GENEL
 - Design patterns ( % Strategy Pattern )
