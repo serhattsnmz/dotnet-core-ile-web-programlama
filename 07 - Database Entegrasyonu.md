@@ -2,11 +2,15 @@
 
 ### 01 – ORM (Object Relational Mapping) Nedir?
 - İlişkisel veritabanı (RDBMS) ile nesneye yönelik programlanın (OOP) arasında bir tür köprü özelliği gören ve ilişkisel veritabanındaki bilgilerimizi yönetmek için, nesne modellerimizi kullandığımız bir tekniktir/metodtur.
-- Database işlemleri öncelikle bu katmanda gerçekleştirilir, sonra database üzerine SaveChanges yapılır.
+- Database işlemleri öncelikle ORM katmanında gerçekleştirilir, sonra database üzerine SaveChanges yapılır.
     - Transaction Özelliği
     - Bu sayade verilerin CRUD işlemlerinde herhangi bir hata çıkması sonucu oluşan yarıda kesilme ve verilerin bir kısmının db üzerine kayıt edilmesi sorunu ortadan kalkar.
     - Veriler biz `SaveChanges()` metodunu çalıştırmayana kadar db üzerine kaydedilmez.
     - Bu yüzden işlemler bittiğinde bu metodun çalıştırılması unutulmamalıdır.
+- Her yazılım dilinin web framework'ünde dahili veya harici ORM bulunur.
+- ORM kullanmak, database işlemlerimizi daha hızlı yapmamızı ve TSQL kodlarıyla uğraşmamamızı sağlar. Biz CRUD işlemlerimizi tamamen OOP yapısına bağlı olarak modeller üzerinden yaparken, arka planda ORM sayesinde bu işlemler TSQL yapısına çevrilip işlenir.
+- .NET Core içinde, ORM olarak Entity Framework kullanmaktayız.
+- .NET Framework ile programlama yaparken harici olarak indirdiğimiz Entity Framework, .NET Core ile birlikte standart bir kütüphane olarak dahili gelir.
 
 <p align="center">
     <img src="assets/05.png" style="max-height:300px" />
@@ -22,7 +26,8 @@
     2. Code First : DB tasarımı yapıldıktan sonra, bu yapılar OOP yapısına uygun olarak modellenir, daha sonra bu modeller üzerinden db tabloları ilgili database üzerinde oluşturulur.
 
 ### 03 - Dependency Injection
-- Tanım : 
+- DI, proje yapısı içinde bağımlılıkları en aza indirmek için kullandığımız yapılardır.
+- https://medium.com/@atarikguney/dependency-injection-nedir-1124c15249ad 
 - Dependency Injection yapısı ile database işlemleri yapmak için izlenmesi gereken yol:
     1. Database tablolarını oluşturacak `Model (Entity)` oluşturulması
     2. Veritabanı bağlantısını sağlayacak `Context` sınıfının oluşturulması

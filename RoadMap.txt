@@ -15,4 +15,9 @@
 
 - Database oluştururken virtual kullanımı ve nullable halen var mı ? 
 
+- Dependecy Injection için not oluşturulacak.
+
 * Validation ifadeleri aynı - Kontrol et
+
+// GENEL
+- Design patterns ( % Strategy Pattern )
