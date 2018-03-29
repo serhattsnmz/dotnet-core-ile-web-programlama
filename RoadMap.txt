@@ -1,5 +1,6 @@
 - Klasör yapısı > Notu tamamla
 - Tag helperslar
+    - asp-items ve ListItem nesnesi (Yer işaretlerine bakılacak.)
 - Ajax ile validation konrolü burda da var m?? 
 - Startup.cs içindeki metotların ayrıntılı anlamları
 - Giriş kısmındaki kullanılabilir paket yöneticileri notu tamamlanacak.
@@ -13,15 +14,17 @@
     - https://www.c-sharpcorner.com/article/all-about-appsettings-json-in-asp-net-core-2-0/
     - DB bağlantı stringinin appsettings içinden çekilmesi ve notlara eklenmesi
 
-- Database oluştururken virtual kullanımı ve nullable halen var mı ? 
-
-- Dependecy Injection için not oluşturulacak.
-    - https://medium.com/@atarikguney/dependency-injection-nedir-1124c15249ad 
+- BundleConfig ayarlamalarının yapılması (db önceki notlar)
 
 * Validation ifadeleri aynı - Kontrol et
+
+- Db örnek verileri eklemek için yazılan seed metodu eklenecek
+
 
 - EF Core dökümanı ayrıntılı okunacak.
     - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
 
+
 // GENEL
 - Design patterns ( % Strategy Pattern )
+- Class yapısındaki base yapısı

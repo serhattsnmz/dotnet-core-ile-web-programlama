@@ -116,6 +116,16 @@ namespace Project.Controllers
 
 #### Edit.cshtml
 
+- Update işlemleri yapılırken, Crate html dosyasından farklı olarak, ID property'sinin hidden olarak alınacağı unutulmamalıdır.
+    - Update yapılırken, update yapılacak db elemanı bu gelen ID'ye göre bulunur.
+    - Eğer ID kısmını hidden olarak formdan göndermezsek, ID = 0 olarak gidecektir ve güncelleme yapılmayacaktır.
+- Update işleminde post edilen nesne içinde, sadece form içinde çağırılan elemanların gönderileceği unutulmamalıdır.
+    - Örneğin `CreatedDate`, `IsActive` gibi property'ler varsa ve biz bunları form içinden göndermezsek, bu kısımların default değeri alınarak gönderilen nesne oluşturulur ve update yapıldığında eski değerler yerine bu default değerler gelir.
+    - Bu durumda bizim db üzerinde istenmeyen değişiklikler yapılmasına neden olur.
+    - Bu sorunu çözmek için iki yöntem vardır:
+        1. Form içinine bu parametreler hidden olarak gönderilir, böylece yeni nesne oluşurken, bu bilgiler eskisiyle aynı olarak gönderilecektir.
+        2. Update yapılırken `_context.Update(person);` fonksiyonunu kullanmak yerine, gelen ID'ye göre db elemanı çekilip sadece ilgili alanlar replace edilerek tekrar db'ye gönderilir.
+
 ```html
 @model Person
 

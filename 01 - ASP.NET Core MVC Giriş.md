@@ -92,6 +92,9 @@ namespace WebApplication1
             // wwwroot dizini altındaki statik dosyaları kullanmamızı sağlar.
             app.UseStaticFiles();
 
+            // Status kod sayfalarının gösterimini sağlar.
+            app.UseStatusCodePages();
+
             // MVC yapımız için default bir route tanımlaması yaparız.
             // Başka bir yöntem olarak aşağıdaki ifade de kullanılabilir.
             // app.UseMvcWithDefaultRoute();

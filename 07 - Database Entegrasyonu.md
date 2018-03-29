@@ -70,6 +70,8 @@
 - Tabloları oluştururken models dizini altında yeni bir `Entities` dizini açılıp kullanılabileceği gibi, yeni bir class library projesi de açılarak modellemeler oluşturulabilir.
 - Modellemeler oluşturulurken dikkat edilmesi gerekenler:
     - Her modelin bir ID'si olmalıdır.
+        - Proporty belirtilirken `ID` veya `<modelName>ID` isimlendirmelerinden biri verildiğinde, otomatik olarak bu kısım primary key olarak alınır.
+        - Bunlar dışında başka bir isim verilirse, property üstüne attribute olarak `[Key]` paramatresi verilmelidir.
     - Modeller içinde foreign key bağlamaları varsa, bu foreign key ID'leri ayrıca tekrar yazılmalıdır. Bu işlem CRUD işlemlerinde kolaylık sağlamaktadır.
     - Modeller bittiğinde validation kısımlarının da yazıldığına emin olunulmalıdır.
     - Database üzerine tablolar oluşturulurken tablo isimlerini custom olarak girmek istiyorsak, clas üstüne attribute olarak `[Table(<tablo_adi>)]` yazılabilir.
@@ -126,15 +128,52 @@ public void ConfigureServices(IServiceCollection services)
     services.AddMvc();
 
     var connection = "Server=.;Database=_coreDeneme;UID=sa;PWD=123";
-    services.AddDbContext<ProjectContext>(option => option.UseSqlServer(connection));
+    services.AddDbContext<ProjectContext>(
+        option => option.UseSqlServer(connection)
+        );
+}
+```
+
+- Eğer bağlantı string'inin projenin içerisinde değil de, ayrı bir config dosyası olarak yazılmasını istiyorsak, bunun için projeye `appsettings.json` adlı bir dosyayı eklememiz gerekmektedir.
+    - Bunun için projeye sağ tıklayıp `Add > New Item > ASP.NET Configuration File` dosyası eklenebilir.
+    - Bu dosya, eski sürümdeki `WebConfig` dosyasının yerine geçmektedir.
+    - Dosya eklendiğinde, içinde default olarak şöyle bir json yapısı gelmektedir:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=_CHANGE_ME;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
+```
+
+- Buradaki `DefaultConnection`, kendi yazacağımız bağlantı stringi ile değiştirildikten sonra `Startup.cs` içinde bağlantı için artık şöyle bir kod yazılabilir.
+
+```cs
+public IConfiguration Configuration { get; }
+
+public Startup(IConfiguration configuration)
+{
+    Configuration = configuration;
+}
+
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+    services.AddDbContext<EfCoreDbContext>(
+        option => option.UseSqlServer(
+            Configuration.GetConnectionString("DefaultConnection")
+            ));
 }
 ```
 
 ### ADIM 03 - Migration İşlemleri
 - Migration işlemleri, database ile modellerimizin arasındaki farkın bulunması ve database güncellenmeden önce hangi işlemlerin yapılacağının çözümlendiği işlemdir.
-- Migration işlemleri için bir kütüphanenenin kurulması gerekiyor. Bunun için projeye sağ tıklayıp `Edit <project>.csproj` yoluna gelip aşağıdaki kütüphaneyi `ItemGroup` tagları arasına ekliyoruz.
-    - `<DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0"></DotNetCliToolReference>`
-- Daha sonrasında projenin ana dizininde `cmd` açılarak veya `Nuget Package Console` ile aşağıdaki kodlar çalıştırılır.
+- Migration işlemleri iki yolla yapılabilir:
+    1. Projenin ana dizininde `cmd` açılarak 
+        - Migration işlemleri cmd ile yapılacaksa bir kütüphanenenin kurulması gerekiyor. Bunun için projeye sağ tıklayıp `Edit <project>.csproj` yoluna gelip aşağıdaki kütüphaneyi `ItemGroup` tagları arasına ekliyoruz.
+        - `<DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0"></DotNetCliToolReference>`
+    2. `Nuget Package Console` ile 
 - Yapılacak migration işlemleri ve kodları şu şekildedir : 
     - Yeni bir migration eklemek
         - Komut satırı
@@ -214,3 +253,45 @@ public void ConfigureServices(IServiceCollection services)
     services.AddMvc();
 }
 ```
+
+### Kurumsal Mimari Yapısıyla Core Projesi Oluştumak
+
+- Buradaki amaç, projemiz içindeki her katmanı ayrı bir library içinde kullanarak, projenin yönetilebilirliğini arttırmaktır.
+- Bunun için, bir solution içinde açamız gereken temelde 3 tane proje vardır. Bunların biri `CoreMVC`, diğer ikisi ise `Class Library`'dir.
+- Projeler oluşturulduktan sonra, her projenin kullanılan projeye göre birbirine referans vermesi gerekmektedir.
+- Migration işlemleri yapılırken, assembly yolunun WebUI içinde olduğunu ayar olarak belirtmemiz gerekmektedir.
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+    services.AddDbContext<EfCoreDbContext>(
+        option => option.UseSqlServer(
+            Configuration.GetConnectionString("EfCoreDb"),
+            b => b.MigrationsAssembly("Project.WebUI")
+            ));
+}
+```
+
+1. **Project.WebUI** (Core MVC Projesi)
+    - Bu proje, bizim çalışacak main projemizdir.
+    - Diğer projelerden referans alır ve kullanır.
+    - Projenin çalışması için bu projenin start-up project olarak seçilmesi gereklidir.
+2. **Project.Entity** (Class Library)
+    - İçinde db modellerimizin olduğu sınıftır.
+3. **Project.Data** (Class Library)
+    - Database bağlantılarının bulunduğu alandır.
+    - Database bağlantısı yapılacağı için içinde Entity Framework Core kütüphanesi bulunmalıdır.
+        - NPM içinden `Microsoft.EntityFrameworkCore.SqlServer` kütüphanesi kurulabilir.
+        - NPM Console üzerinden `Install-Package Microsoft.EntityFrameworkCore.SqlServer` komutu çalıştırılarak kurulabilir.
+        - `Project.Data.csproj` dosyası içindeki `<itemgroup>` tagları içine aşağıdaki satır eklenebilir.
+            - `<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />`
+            - ya da 
+            - `<PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />`
+    - İçinde 2 tane dizin bulundurur.
+        1. **Abstract** 
+            - Interface'lerin tanımlandığı alandır.
+        2. **Concrete**
+            - Database bağlantıları için yazılacak `Context` ve `Repository` sınıflarının olacağı klasördür.
+            - Projeye dahil edilecek her bir db ve orm teknolojisi için ayrı bir klasör oluşturur. 
+            - Bu klasörler içinde bağlantı için gereken Context ve Repository sınıfları oluşturulur.
