@@ -8,7 +8,7 @@
 - Aralarındaki farklar ve taşıma ömürleri
 
 ### 2) View’dan Controller’a Veri Gönderme
-- View'dan Controller'a veri gönderim 3 şekilde olur:
+- View'dan Controller'a veri gönderim 3 şekilde olur (Request):
     - 1. Route Values : `/Course/Details/2`
     - 2. Query String : `/Course/Details?ID=2`
     - 3. Form Data : `ID=2`
@@ -20,6 +20,11 @@
         - Raw request içinde body kısmında taşınır.
         - Form Data yapısındadır.
 - GET ve POST ile gönderilen veriler, action üzerinden nasıl alınır.
+    - Her iki metotla gönderilen veri de, parametre olarak alınabilir.
+    - Parametre olarak almanın dışında her iki metotla gelen bilgi de `Request` üzerinde taşındığı için, bu sınıf içinden alınabilir.
+        - GET -> `Request.Query["key"]`
+        - POST -> `Request.Form["key"]`
+        - Route -> `RouteData.Values["key"]`
 
 ```html
 <!-- HTML PART -->

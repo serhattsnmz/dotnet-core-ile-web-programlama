@@ -87,10 +87,12 @@ defaults: new { area = Blog, controller = Users, action = AddUser }
 - `RouteData` request içindeki route parametrelerinin tutulduğu alandır. 
 - Bunlar action, controller ve diğer taşınan parametrelerdir.
 - RouteData içinde post veya get ile taşınan veriler taşınmaz!
+- Route içinde taşınan parametrelerin, action metodu içine parametre olarak alınmasına gerek yoktur. Direk `RouteData.Values` içinden çekilebilir.
+    - İstenilirse, RouteData yerine, metot içine parametre olarak da alınabilir.
 
 ```cs
 [Route("Haberler/Spor/{haberID}")]
-public string Index3(int haberID)
+public string Index3()
 {
     object hID          = RouteData.Values["haberID"];      // 1
     object action       = RouteData.Values["action"];       // Index3
@@ -99,9 +101,69 @@ public string Index3(int haberID)
 }
 ```
 
+#### A catch-all parameters
+- Route değerlerindeki her bir parametre sadece bir segment alır. Eğer url olarak gönderilen segment sayısı, onu karşılayan route ayarlarındaki segment sayısından fazla olursa, url uyumsuzluğu olduğundan 404 hatası ile karşılaşırız.
+- Bazı durumlarda, route üzerinden kaç tane segment geleceğini sınırlandırmak istemeyiz.
+- Bu durumda route temasının en sonuna, gelecek tüm segmentleri alabilecek `Catch-All` parametresi ekleriz.
+- Bu yapı, metotlardaki `params` ifadesine benzerdir.
+- Bunun için parametre isminin önüne `*` işareti getirilir.
+- Parametre ismi olarak herhangi bir değer alınabilir.
+- Örnek vermek gerekirse;
+
+```cs
+routes.MapRoute(
+    name: "default",
+    template: "{controller=Home}/{action=Index}/{*extra}");
+```
+
+- Burada yapılan ayarlamada, ilk iki segmentten sonra gelen tüm segmentler, extra parametresi ile alınır.
+- Daha sonra bu parametre `/` işareti üzerinden parse edilebilir.
+- Örnek olarak aşağıdaki gibi bir controller yazıp değerleri çekersek;
+
+```cs
+public IActionResult Index()
+{
+    var model = new Dictionary<string, object>();
+
+    model["controller"] = RouteData.Values["controller"];
+    model["action"] = RouteData.Values["action"];
+    model["extra"] = RouteData.Values["extra"];
+
+    return View(model);
+}
+```
+
+- Request Url yapısına göre aşağıdaki değerler elde edilecektir.
+- **NOT:** Catch-All parametresi her zaman opsiyoneldir.
+
+```
+>> URL : localhost/Route/Index/3/4/5
+Controller  : Route
+Action      : Index
+Extra       : 3/4/5
+
+>> URL : localhost/Route/Index/3
+Controller  : Route
+Action      : Index
+Extra       : 3
+
+>> URL : localhost/Route/Index
+Controller  : Route
+Action      : Index
+Extra       : 
+```
+
 ### 04) Route Constrainsts ( Rota Kısıtlamaları )
 - Route yollarındaki parametrelerin belirli bir kuralda girilmesi ve bu kurallarda girilmediği takdirde yönlendirme yapılmamasını istediğimiz durumlarda kullanırız.
 - Rota kısıtlaması yapılan parametreler opsiyonel olarak kullanılmaz.
+- **NOT:** Rota kısıtlamaları `constraints` parametresinde tanımlanabileceği gibi, attribute rotings kısmında olduğu gibi, `template` kısmında da tanımlanabilir.
+    - Örnek vermek gerekirse;
+
+```cs
+routes.MapRoute(
+    name: "default",
+    template: "{controller=Home}/{action=Index}/{id:int:range(1,100)?}");
+```
 
 #### Regex (Regular Expressions - Düzenli İfadeler) ile Rota Kısıtlaması
 - (.) -> Bir  karakterin gelecebileceği ve karakteri tanımlamadığımız yerlerde kullanılır.

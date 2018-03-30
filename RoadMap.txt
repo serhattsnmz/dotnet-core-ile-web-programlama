@@ -20,11 +20,25 @@
 
 - Db örnek verileri eklemek için yazılan seed metodu eklenecek
 
+- Root dizini alma yöntemleri. wwwroot dizininin nasıl alınacağı? Bu dizinin publish edildiğinde root files olarak bulunup bulunmadığı
 
 - EF Core dökümanı ayrıntılı okunacak.
     - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
+
+- Formlar ile ilgili bir not oluşturulacak.
+    - Form elemanları
+        - Form elemanlarının ayrı ayrı olarak kullnaılması ile ilgili CEO çıkarımları
+        - Bunla ilgili bir medium yazısı vardı. 
+    - Formlar üzerinden dosya gönderim örnekleri
+    - Tag helperlar dahil edilebilir.
+    - Formların post ve get ile gönderimleri
+    - Form bilgilerinin arka planda çekilmesi   
+        - Bunlardan model binding ve normal yöntem arasıdaki fark.
+
+- Custom Route tanımlanması notlarda eksik!
 
 
 // GENEL
 - Design patterns ( % Strategy Pattern )
 - Class yapısındaki base yapısı
+- Derinlemesine C# ile ilgil araştırma yapılacak. 
