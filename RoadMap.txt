@@ -42,6 +42,9 @@
 
 - Custom Input validation tanımlama
 
+- DI Liftime
+    - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#service-lifetimes-and-registration-options 
+
 
 // GENEL
 - Design patterns ( % Strategy Pattern )
