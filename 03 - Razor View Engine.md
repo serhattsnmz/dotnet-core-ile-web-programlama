@@ -1,7 +1,8 @@
 ## RAZOR VIEW ENGINE
 
-### 01) Razor Syntax
+### 01 - Razor Syntax
 - View Engine nedir?
+    - View’lerinizi HTML çıktısı olarak render etmek için kullanılan bir mekanizma/teknoloji’dir.
 - Razor View Engine nedir?
 - Razor blogu açma ve Razor içinde C# kodlarının kullanımı
 - Razor blogu içindeki değişkenlere Razor dışından ulaşım
@@ -38,7 +39,7 @@
 }
 ```
 
-### 02) HTML Helpers 
+### 02 - HTML Helpers 
 - Html Helper'lar adından da anlaşılacağı gibi, html kodlarını kısa yoldan, metotlarla oluşturmamız için bize yardımcı olur.
 - Yazdığımız bu metotlar daha sonrasında render edilirken, normal html kodlarına çevilir.
 - **NOT! :** Yazdığımız tüm html helper'ların son çıktısı html'dir.
@@ -54,6 +55,8 @@
 #### URL Helpers
 - Html.ActionLink()
 - Url.Action()
+- Url helperların otomatik link oluşturması ve bunun önemi
+    - .NET Core içinde bunlar yerine tag helperlar kullanılıyor.
 
 #### System.Net.WebUtility Helpers
 - .HtmlEncode() 
@@ -73,7 +76,7 @@
     - Html.AntiForgeryToken()
     - ...
 
-### 03) Custom Html Helpers
+### 03 - Custom Html Helpers
 - `IHtmlHelper` sınıfı içerisine extension metotlar yazarak istediğimiz custom helper'ları ekleyebiliriz.
 - Bunun için yapılması gereken adımlar şunlardır:
     - Bir klasör içinde ( Library ) class dosyası ( extensions ) oluşturulur.

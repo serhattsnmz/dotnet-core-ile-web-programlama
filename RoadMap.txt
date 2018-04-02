@@ -37,6 +37,11 @@
 
 - Custom Route tanımlanması notlarda eksik!
 
+- Bu web sitesi incelenecek:
+    - https://www.tektutorialshub.com/asp-net-core-tutorial/
+
+- Custom Input validation tanımlama
+
 
 // GENEL
 - Design patterns ( % Strategy Pattern )

@@ -153,16 +153,38 @@ Action      : Index
 Extra       : 
 ```
 
-### 04) Route Constrainsts ( Rota Kısıtlamaları )
+### 04) Route Constraints ( Rota Kısıtlamaları )
 - Route yollarındaki parametrelerin belirli bir kuralda girilmesi ve bu kurallarda girilmediği takdirde yönlendirme yapılmamasını istediğimiz durumlarda kullanırız.
 - Rota kısıtlaması yapılan parametreler opsiyonel olarak kullanılmaz.
-- **NOT:** Rota kısıtlamaları `constraints` parametresinde tanımlanabileceği gibi, attribute rotings kısmında olduğu gibi, `template` kısmında da tanımlanabilir.
-    - Örnek vermek gerekirse;
+- Rota kısıtlamaları iki yolla yapılabilir : 
+    1. Inline Constraints
+    2. Maproute içinde Contraints argümanı ile
 
 ```cs
+// Inline Constraint
 routes.MapRoute(
     name: "default",
     template: "{controller=Home}/{action=Index}/{id:int:range(1,100)?}");
+
+// Maproute parametresi - Single
+routes.MapRoute(
+    name: "default",
+    template: "{controller}/{action}/{id}",
+    defaults: new { controller = "Home", action = "Index"},
+    constraints: new { id = new IntRouteConstraint()});
+
+// Maproute parametresi - Multiple
+routes.MapRoute(
+    name: "default",
+    template: "{controller}/{action}/{id}",
+    defaults: new { controller = "Home", action = "Index"},
+    constraints: new { id = new CompositeRouteConstraint(
+        new IRouteConstraint[]
+        {
+            new IntRouteConstraint(),
+            new RangeRouteConstraint(1,100)
+        }
+        )});
 ```
 
 #### Regex (Regular Expressions - Düzenli İfadeler) ile Rota Kısıtlaması
@@ -200,8 +222,65 @@ routes.MapRoute(
         metod   = new HttpMethodRouteConstraint("GET","POST") });
 ```
 
-#### Custom Route Constrainsts
-- Eklenecek.
+#### Custom Route Constraints
+- Kendi kuralımızı yazmak için öncellikle `IRouteConstraint` interface'inden türeyen bir sınıfa ihtiyacımız vardır. 
+    - Interface'i implement ettiğimizde içinde bir tane `Match` adlı metot gelir ve bu metodun geri dönüş tipi `bool` olmak zorundadır.
+    - Bu metot içine kuralımızı yazıp, sonucunda, gelen değerin uyup uymadığını belirtmek için true veya false döndürürüz.
+- Match metodu içinde toplam 5 tane parametre bulunur : 
+    - **HttpContext:** Request, response, session vs gibi, http özel metotlarını bulunduran parametredir.
+    - **IRouter:** Constraint'lere ait router metotlarını taşır.
+    - **routeKey:** Kontrol edilecek route değerinin alındığı yerdir. Custom Constraint metodumuzu üzerinde çalıştırdığımız route elemanının kendisine bunla ulaşırız.
+    - **RouteValueDictionary:** Url route parametrelerinin bulunduğu sözlük yapısıdır.
+    - **RouteDirection:** Routing işleminin Http isteğinin URL'inden mi, yoksa custom oluşturulan URL'den mi geldiğini söyler. Enum yapısındadır.
+        - IncomingRequest : Client tarafından gelen url isteği.
+        - UrlGeneration : Route ayarları sonucu oluşturulan URL isteği.
+
+```cs
+public class WeekDaysConstraint : IRouteConstraint
+{
+    List<string> WeekDays = new List<string>() { "pzt", "sali", "car", "per", "cuma" };
+
+    public bool Match(HttpContext httpContext, IRouter route, string routeKey, RouteValueDictionary values, RouteDirection routeDirection)
+    {
+        return WeekDays.Contains(values[routeKey]);
+    }
+}
+```
+
+- MapRoute parametresi olarak kullanımı
+
+```cs
+routes.MapRoute(
+    name: "default",
+    template: "{controller}/{action}/{day}",
+    defaults: new { controller = "Home", action = "Index"},
+    constraints: new { day = new WeekDaysConstraint()});
+```
+
+- Eğer metot inline constraint olarak kullanılacaksa, bunun servis olarak eklenmesi gerekmektedir.
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+
+    services.Configure<RouteOptions>(option =>
+        option.ConstraintMap.Add("weekday", typeof(WeekDaysConstraint))
+    );
+}
+
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.UseMvc(routes =>
+    {
+        routes.MapRoute(
+            name: "default",
+            template: "{controller}/{action}/{day:weekday}",
+            defaults: new { controller = "Home", action = "Index" });
+    });
+}
+```
+
 
 ### 05) Attribute Routing
 - Attribute Route ayarlaması kullanılan actionlara, `{controller}/{action}` üzerinden artık bağlanılınamaz.
@@ -362,3 +441,35 @@ public IActionResult Icerik(int icerikID)
     return View();
 }
 ```
+
+### 06 - Roting Constraints Listesi
+
+#### Data Tipi Kontrolü
+
+CONSTRAINT	| INLINE | CLASS | NOTES 
+--- | --- | --- | ---
+int	|{id:int} | IntRouteConstraint	| Constrains a route parameter to represent only 32-bit integer values
+alpha	| {id:alpha}	| AlphaRouteConstraint	| Constrains a route parameter to contain only lowercase or uppercase letters A through Z in the English alphabet.
+bool	| {id:bool}	| BoolRouteConstraint	| Constrains a route parameter to represent only Boolean values.
+datetime	| {id:datetime}	| DateTimeRouteConstraint	| Constrains a route parameter to represent only DateTime values.
+decimal	| {id:decimal}	| DecimalRouteConstraint	| Constrains a route parameter to represent only decimal values.
+double	| {id:double}	| DoubleRouteConstraint	| Constrains a route parameter to represent only 64-bit floating-point values
+float	| {id:float}	| FloatRouteConstraint	| Matches a valid float value (in the invariant culture - see warning)
+guid	| {id:guid}	| GuidRouteConstraint	| Matches a valid Guid value
+
+#### Uzunluk ve İçerik Kontrolü
+
+CONSTRAINT	| INLINE | CLASS | NOTES 
+--- | --- | --- | ---
+length(length)	| {id:length(12)}	| LengthRouteConstraint	| Constrains a route parameter to be a string of a given length or within a given range of lengths.
+maxlength(value)	| {id:maxlength(8)}	| MaxLengthRouteConstraint	| Constrains a route parameter to be a string with a maximum length.
+minlength(value)	| {id:minlength(4)}	| MinLengthRouteConstraint	| Constrains a route parameter to be a string with a maximum length.
+range(min,max)	| {id:range(18,120)}	| RangeRouteConstraint	| Constraints a route parameter to be an integer within a given range of values.
+min(value)	| {id:min(18)}	| MinRouteConstraint	| Constrains a route parameter to be a long with a minimum value.
+max(value)	| {id:max(120)}	| MaxRouteConstraint	| Constrains a route parameter to be an integer with a maximum value.
+
+#### Regex Kontrolü
+
+CONSTRAINT	| INLINE | CLASS | NOTES 
+--- | --- | --- | ---
+regex(expression)	| {ssn:regex(^\\d{{3}}-\\d{{2}}-\\d{{4}}$)}	| RegexRouteConstraint	| Constrains a route parameter to match a regular expression.
