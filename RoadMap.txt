@@ -45,6 +45,10 @@
 - DI Liftime
     - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#service-lifetimes-and-registration-options 
 
+- RoadMap dosyası içinde konu listesi yazılacak.
+    - Aralara projeler ve front end konuları yereştirilecek
+    - Örnek proje planlaması yapılacak, projeler yapılıp yüklenebilir.
+
 
 // GENEL
 - Design patterns ( % Strategy Pattern )
