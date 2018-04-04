@@ -49,8 +49,20 @@
     - Aralara projeler ve front end konuları yereştirilecek
     - Örnek proje planlaması yapılacak, projeler yapılıp yüklenebilir.
 
+- Projelere, ASP dışında ek konular eklenecek.
+    - Github
+        - PDF belgesi
+    - TFS
+    - Temiz kod yazma
+        - https://hackernoon.com/tips-from-the-book-every-programmer-should-read-425fb77873f8
+        - Youtube videosu
+
+- microsoftun kendi kütüphanesine bakılacak referans olarak :
+    - https://docs.microsoft.com/en-us/aspnet/core/index
 
 // GENEL
 - Design patterns ( % Strategy Pattern )
 - Class yapısındaki base yapısı
 - Derinlemesine C# ile ilgil araştırma yapılacak. 
+- İsimlendirme kuralları
+    - http://wiki.c2.com/?CapitalizationRules
