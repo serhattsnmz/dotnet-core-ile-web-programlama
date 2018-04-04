@@ -1,7 +1,6 @@
 - Klasör yapısı > Notu tamamla
 - Tag helperslar
     - asp-items ve ListItem nesnesi (Yer işaretlerine bakılacak.)
-- Ajax ile validation konrolü burda da var m?? 
 - Startup.cs içindeki metotların ayrıntılı anlamları
 - Giriş kısmındaki kullanılabilir paket yöneticileri notu tamamlanacak.
 - asp.net kısmına ado.net ile ilgili notlar eklenecek.
@@ -16,14 +15,9 @@
 
 - BundleConfig ayarlamalarının yapılması (db önceki notlar)
 
-* Validation ifadeleri aynı - Kontrol et
-
 - Db örnek verileri eklemek için yazılan seed metodu eklenecek
 
 - Root dizini alma yöntemleri. wwwroot dizininin nasıl alınacağı? Bu dizinin publish edildiğinde root files olarak bulunup bulunmadığı
-
-- EF Core dökümanı ayrıntılı okunacak.
-    - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
 
 - Formlar ile ilgili bir not oluşturulacak.
     - Form elemanları
@@ -34,13 +28,6 @@
     - Formların post ve get ile gönderimleri
     - Form bilgilerinin arka planda çekilmesi   
         - Bunlardan model binding ve normal yöntem arasıdaki fark.
-
-- Custom Route tanımlanması notlarda eksik!
-
-- Bu web sitesi incelenecek:
-    - https://www.tektutorialshub.com/asp-net-core-tutorial/
-
-- Custom Input validation tanımlama
 
 - DI Liftime
     - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection#service-lifetimes-and-registration-options 
@@ -59,6 +46,8 @@
 
 - microsoftun kendi kütüphanesine bakılacak referans olarak :
     - https://docs.microsoft.com/en-us/aspnet/core/index
+    - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
+    - https://www.tektutorialshub.com/asp-net-core-tutorial/
 
 // GENEL
 - Design patterns ( % Strategy Pattern )
