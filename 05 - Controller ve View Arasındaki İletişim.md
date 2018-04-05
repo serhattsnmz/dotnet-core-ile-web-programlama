@@ -68,6 +68,8 @@ public ActionResult GetInfo(string name, string surname, int age)
 - Controller çalışmadan önce bu token'ın, session üzerinde kaydedilen token ile eşleştirilmesi yapılır. Eğer token uyumsuz ise geçişe izin verilmez.
 - Böylece başka bir sayfadan veya harici olarak form gönderimi engellenmiş, sadece uygulamının render edip gönderdiği html üzerindeki form gönderimi kabul edilmiş olunur.
 - Bu yöntemi kullanmak için yapılması gereken şudur:
-    - Öncelikle html tarafındaki form içine otomatik olarak bir token üretilir. .NET Framework yapısında bu token üretimini biz bir kod girerek yapıyorduk, fakat bu yapıya artık ihtiyaç yok. Otomatik olarak üretilmektedir.
+    - Öncelikle html tarafındaki form içine bir `__RequestVerificationToken` adında bir token üretilmelidir. 
+        - Eğer projeye `TagHelpers`'lar dahilse, form tagları açılıp **form metodu post olarak işaretlenirse** bu token otomatik olarak üretilir.
+        - Eğer TagHelper'lar kullanılmıyorsa, htmlde form taglarının arasına `@Html.AntiForgeryToken()` yazılarak, Html Helper'lar yardımıyla bu token üretilebilir.  
     - Daha sonra bu formun post edildiği controller üzerinde attribute olarak şu satır eklenir. Bu attribute'ün amacı, token kontrolü yapıp, uyumsuzluk durumda controller'a erişimi engellemektir.
         - `[ValidateAntiForgeryToken]`

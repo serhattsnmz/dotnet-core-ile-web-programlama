@@ -44,6 +44,13 @@
         - https://hackernoon.com/tips-from-the-book-every-programmer-should-read-425fb77873f8
         - Youtube videosu
 
+- Scaffolding nedir?
+- Uygulamanın çalışmaya başladıktan sonra sayfa açılana kadar olan süreci
+- .NET Core çalışma alt yapısı
+    - MIL - JIT Compiler vs. 
+
+- Önemli! : İlk projenin oluşturulması ve ilk hello world sayfası ile ilgili not eklenmesi gerekmektedir. Bunun için "Giriş" notuna bir section açılabilir.
+
 - microsoftun kendi kütüphanesine bakılacak referans olarak :
     - https://docs.microsoft.com/en-us/aspnet/core/index
     - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
