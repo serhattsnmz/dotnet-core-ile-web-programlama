@@ -420,11 +420,11 @@ namespace Project.Library.TagHelpers
 
 - Bu yapılar `_ViewImports.cshtml` dosyası içine eklenirse, tüm View dosyalarında kullanılabilir.
 
-#### Class içeriğinin yazılması : Attributes
+#### Class içeriğinin yazılması : Property
 
-- Clas içinde verilen attribute'ler, html yazarken belirtilebileceğimiz attribute anlamına gelir.
-- Bu attribute'lere default değer atanarak, html kısmında yazılmadığında default değerin kullanılmasını sağlayabiliriz.
-- Attribute isimleri `CamelCase` düzeninde verildiğinde, kullanırken bu isimler `kebab-case` düzenine çevrilir. (Yukarıda anlatılan kurallar geçerlidir.)
+- Clas içinde verilen property'ler, html yazarken belirtilebileceğimiz attribute anlamına gelir.
+- Bu property'lere default değer atanarak, html kısmında yazılmadığında default değerin kullanılmasını sağlayabiliriz.
+- Property isimleri `CamelCase` düzeninde verildiğinde, kullanırken bu isimler `kebab-case` düzenine çevrilir. (Yukarıda anlatılan kurallar geçerlidir.)
 
 ```cs
 public class CustomMail : TagHelper
@@ -435,6 +435,20 @@ public class CustomMail : TagHelper
 
 ```html
 <custom-mail mail-address="example@mail.com"></custom-mail>
+```
+
+- Yukarıdaki kullanımdan farklı olarak, oluşlturduğumuz property'nin kendi ismiyle değil de farklı bir isim ile kullanılmasını istiyorsak, `HtmlAttributeName(<attribute_name>)` metodunu kullanabiliriz.
+
+```cs
+public class CustomMail : TagHelper
+{
+    [HtmlAttributeName("mail")]
+    public string MailAddress { get; set; }
+}
+```
+
+```html
+<custom-mail mail="example@mail.com"></custom-mail>
 ```
 
 #### Class içeriğinin yazılması : Fields
