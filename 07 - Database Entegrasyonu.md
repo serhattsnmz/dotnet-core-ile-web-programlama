@@ -76,9 +76,63 @@
     - Modeller bittiğinde validation kısımlarının da yazıldığına emin olunulmalıdır.
     - Database üzerine tablolar oluşturulurken tablo isimlerini custom olarak girmek istiyorsak, clas üstüne attribute olarak `[Table(<tablo_adi>)]` yazılabilir.
 - Tablolar arasındaki ilişkileri tanımlama
-    - Bire bir ilişki – YOK
+    - Bire bir ilişki
     - Bire çok ilişki
+        - Tek bağlantının yapıldığı sınıf içinde, elle foreing key tanımlaması yapılmalıdır.
     - Çoka çok ilişki
+        - Çoka çok ilişki, .NET Framework sürümünde, iki tabloya da List olarak `Navigation Property` verildiğinde otomatik olarak ara tablo oluşuyordu.
+        - .NET Core sürümünün şu anki versiyonunda bu durum söz konusu olmadığı için bu tabloyu elle eklememiz gerekmektedir.
+        - Bunun için;
+            - Öncelikle her iki tablonun bağlı olduğu bir ara tablo oluşlturulmalı.
+            - Bu tablonun ID değer almasına gerek yoktur.
+            - Tablonun Context dosyasına DBSet olarak eklenmesine gerek yoktur.
+            - Fakat OnModelBuilder ile, tablolar oluşurken bu tablonun iki tane key yapısına sahip olduğu belirtilmelidir.
+
+```cs
+// Table 1
+public class Table1
+{
+    public int ID { get; set; }
+    public string area { get; set; }
+
+    public List<Table1Table2> Table1Table2s { get; set; }
+}
+
+// Table 2
+public class Table2
+{
+    public int ID { get; set; }
+    public string area { get; set; }
+
+    public List<Table1Table2> Table1Table2s { get; set; }
+}
+
+// Ara Tablo
+public class Table1Table2
+{
+    public int Table1ID { get; set; }
+    public Table1 Table1 { get; set; }
+
+    public int Table2ID { get; set; }
+    public Table2 Table2 { get; set; }
+}
+
+// Context Sınıfı
+public class ProjectContext : DbContext
+{
+    public ProjectContext(DbContextOptions<ProjectContext> option)
+        : base(option) { }
+
+    public DbSet<Table1> Table1s { get; set; }
+    public DbSet<Table2> Table2s { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Table1Table2>().HasKey(k => new { k.Table1ID, k.Table2ID });
+    }
+}
+```
+
 - Bağlı tabloların çekilmesi için kullanılan yöntemler ( Bonus Not )
 
 ### ADIM 02 - Veritabanı İşlemlerini Yönetecek Sınıfı ( Context ) Oluşturma
