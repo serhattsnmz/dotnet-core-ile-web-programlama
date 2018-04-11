@@ -62,3 +62,4 @@
 - Derinlemesine C# ile ilgil araştırma yapılacak. 
 - İsimlendirme kuralları
     - http://wiki.c2.com/?CapitalizationRules
+- Generic Ifadeler (T ve T ile kullanılan where kavramları)
