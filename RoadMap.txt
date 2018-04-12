@@ -51,6 +51,16 @@
 
 - Önemli! : İlk projenin oluşturulması ve ilk hello world sayfası ile ilgili not eklenmesi gerekmektedir. Bunun için "Giriş" notuna bir section açılabilir.
 
+- IDesignTimeDbContext sınıfı araştırılacak.
+
+- Idendity Core ile ilgili not hazırlanacak
+    - 155. Setting up Idendity Core notuna bir daha bakılacak.
+
+- İki tane db kullanırken migration yapılması 
+    - Yer işaretine bakılabilir.
+
+- Metadata olarak UIHint araştırılacak.
+
 - microsoftun kendi kütüphanesine bakılacak referans olarak :
     - https://docs.microsoft.com/en-us/aspnet/core/index
     - https://docs.microsoft.com/en-us/ef/#pivot=efcore&panel=efcore-all
