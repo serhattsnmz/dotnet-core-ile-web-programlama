@@ -1,4 +1,3 @@
-- Klasör yapısı > Notu tamamla
 - Tag helperslar
     - asp-items ve ListItem nesnesi (Yer işaretlerine bakılacak.)
 - Startup.cs içindeki metotların ayrıntılı anlamları
@@ -56,10 +55,13 @@
 - Idendity Core ile ilgili not hazırlanacak
     - 155. Setting up Idendity Core notuna bir daha bakılacak.
 
-- İki tane db kullanırken migration yapılması 
-    - Yer işaretine bakılabilir.
-
 - Metadata olarak UIHint araştırılacak.
+
+- Core ile Docker kullanımı
+    - Vagrant üzerinde deployment
+    - Azure ve Amazon üzerinde deployment
+    - https://www.vagrantup.com/
+    - https://github.com/sprosin/vagrant-dotnet-core
 
 - microsoftun kendi kütüphanesine bakılacak referans olarak :
     - https://docs.microsoft.com/en-us/aspnet/core/index

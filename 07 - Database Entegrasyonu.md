@@ -239,6 +239,16 @@ public void ConfigureServices(IServiceCollection services)
             - `dotnet ef database update`
         - NPM Console
             - `Update-Database`
+- Proje içinde birden fazla DbContext sınıfından türemiş sınıf varsa, migration işlemleri yaparken hangi db için migration yapacağımızı belirtmemiz gerekmektedir. Bunun için;
+    - NPM Console:
+        - `-Context` parametresi kullanılmalıdır.
+        - `Add-Migration <migration_name> -Context <context_name>`
+        - `Update-Database -Context <context_name>`
+    - Komut Satırı:
+        - `-c` veya `--context` parametreleri kullanılabilir.
+        - `dotnet ef migrations add <migration_name> -c <context_name>`
+        - `dotnet ef database update -c <context_name>`
+    - İlk migration işlemleri, direk `Migrations` dizini altında bulunurken, sonra yapılanlar bu dizin altında yeni bir dizin açılarak otomatik olarak oluşturulur.
 
 ### ADIM 04 - Modellere Ait Interface Oluşturulması
 - Her tabloya ait CRUD işlemleri için bir interface tanımlanmalıdır.

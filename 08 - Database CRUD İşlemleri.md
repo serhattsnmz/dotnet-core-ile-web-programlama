@@ -11,39 +11,39 @@ namespace Project.Controllers
 {
     public class HomeController : Controller
     {
-		private IPersonRepository context;
+        private IPersonRepository context;
 
-		public HomeController(IPersonRepository repo)
-			=> context = repo;
+        public HomeController(IPersonRepository repo)
+            => context = repo;
 
-		public IActionResult Index()
-			=> View(context.Persons);
+        public IActionResult Index()
+            => View(context.Persons);
 
-		public IActionResult Create()
-			=> View();
+        public IActionResult Create()
+            => View();
 
-		[HttpPost]
-		public IActionResult Create(Person person)
-		{
-			context.CreatePerson(person);
-			return RedirectToAction("Index");
-		}
+        [HttpPost]
+        public IActionResult Create(Person person)
+        {
+            context.CreatePerson(person);
+            return RedirectToAction("Index");
+        }
 
-		public IActionResult Edit(int id)
-			=> View(context.GetById(id));
+        public IActionResult Edit(int id)
+            => View(context.GetById(id));
 
-		[HttpPost]
-		public ActionResult Edit(Person person)
-		{
-			context.UpdatePerson(person);
-			return RedirectToAction("Index");
-		}
+        [HttpPost]
+        public ActionResult Edit(Person person)
+        {
+            context.UpdatePerson(person);
+            return RedirectToAction("Index");
+        }
 
-		public ActionResult Delete(int id)
-		{
-			context.DeletePerson(id);
-			return RedirectToAction("Index");
-		}
+        public ActionResult Delete(int id)
+        {
+            context.DeletePerson(id);
+            return RedirectToAction("Index");
+        }
     }
 }
 ```
@@ -156,4 +156,20 @@ namespace Project.Controllers
 
 </body>
 </html>
+```
+
+#### SQL Sorgusu Çalıştırma
+
+- .NET üzerinde, LinQ ile yapılan işlemler sınırlı kaldığında, direk SQL komutları çalıştırılabilir.
+- Bunun için `<DbContext>.Database.ExecuteSqlCommand()` metodunu kullanıyoruz.
+- Metot, geri dönüş olarak `int` tipinde, üzerinde değişiklik yapılan `row` sayısını döndürür.
+- Hata olması durumunda `SqlException` fırlatır.
+- **NOT:** Bu yöntem kullanılırken `SQLInjection` açığı yaratmamasına dikkat edilmelidir! 
+
+```cs
+public int DeletePersonWithSQLCommand(int personID)
+{
+    string cmd = $"DELETE FROM Persons WHERE ID={personID}";
+    return efProjectContext.Database.ExecuteSqlCommand(cmd);
+}
 ```

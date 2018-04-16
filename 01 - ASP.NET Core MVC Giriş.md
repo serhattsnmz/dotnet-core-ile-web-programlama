@@ -1,5 +1,35 @@
 ## ASP .NET Core MVC PROGRAMLAMAYA GİRİŞ
 
+#### .NET Core ve .NET Standart Nedir?
+
+- .NET Core öncesinde kullanılan .NET Framework yapısı, aşağıdaki resimden de görüleceği üzere, birbirinden bağımsız olarak geliştirilen yapılarından oluşan bir platformdu.
+- Bu nedenle her bir yapının kendine ait farklı kütüphaneleri, frameworkleri ve runtime'ları vardı.
+- Ayrıca bu yapılar sadece belirli bir işletim sistemi üzerinde (çoğunlukla Windows) çalışıyordu.
+- Geliştirilen kütüphaneler de genel olarak yapıya özgü geliştiriliyordu.
+
+<p align="center">
+    <img src="assets/11.png" />
+</p>
+
+- Hem Cross-platform uygulama geliştirmenin hem de open-source projelerin yükselişi ile birlikte, .NET mimarisi de kökten bir dönüşüme girmiştir.
+- .NET Core ile birlikte .NET mimarisi;
+    - Cross-Platform geliştirmeyi ve deployment'ı destekleyen, 
+    - [Açık kaynak kodlu](https://github.com/aspnet/home),
+    - Web programları, web servisleri, IoT programları ve mobil program arka-planlaması yapılabilen,
+    - Herhangi bir editör ile herhangi bir işletim sisteminde (Windows, MacOS, Linux) geliştirme yapılabilen,
+    - Docker desteği olan,
+    - IIS dışında herhangi bir web server kullanıma uygun bir yapı haline gelmiştir.
+- .NET Core ile .NET Framework arasındaki temel farklar;
+    - .NET Core aslında tek bir uygulama modeli içermektedir : Console Application.
+        - Bu yapıya yeni servisler eklenerek, farklı yapılar ortaya çıkarılmaktadır.
+    - Buna karşın, .NET Framewok üzerinde, yukarıdaki şekilde de görüldüğü üzere, her yapı birbirinden farklıdır.
+
+Aşağıdaki resimden de görüleceği üzere, .NET Core yapısı ortaya çıktıktan sonra da bazı sorunlar devam etti. Bu sorunların en temelinde, .NET Core ve diğer yapılar için kullanılan kütüphane yapılarının birbirinden bağımsız olmasıydı. Bu sorundan ötürü Microsoft, `.NET Standart` adlı yapıyı çıkarıp, tüm kütüphane yapılarını bu çatı altında toplamıştır. Bu sayede herhangi bir platform için sadece bir kütüphane yapısı kullanılabilir hale gelmiştir.
+
+<center>.NET Standart Öncesi</center> | <center>.NET Standart Sonrası</center>
+--- | ---
+<p align="center"><img src="assets/12.png" style="max-height:350px" /></p> | <p align="center"><img src="assets/13.png" style="max-height:350px" /></p>
+
 ### 01) .NET Core ile .NET Framework Arasındaki Farklar
 
 - Eklenecek
@@ -110,13 +140,34 @@ namespace WebApplication1
 ```
 
 ### 05) Projenin Dosya Düzeni
-- Controllers, Views, Models
+- `Controllers`, `Views`, `Models`
     - MVC yapısındaki dizinlerdir.
 - `wwwroot`
-    - Bu dosya, bizim statik dosyalarımızın bulunduğu alandır.
+    - Bu dizin, bizim statik dosyalarımızın bulunduğu alandır.
     - Js, css ve resim dosyaları burada bulunur.
     - Bu kısmı erişime açmak için `Startup.cs` dosyası içindeki `Configure` metodunun içine aşağıdaki kod satırı girilmelidir.
         - `app.UseStaticFiles();`
+    - Bu dizin içine eklenen herhangi bir öğeye `~/` üzerinden ulaşabiliriz.
+        - Örn : `wwwroot>img>01.jpg` dosyasını eklemek için;
+        - `<img src="~/img/01.jpg" />` olarak cshtml dosyasına ekleme yapılabilir.
+- `Dependencies`
+    - Projeye eklenen paketlerin bulunduğu kısımdır. 
+    - Her paket yönetim programı için bir tane dizin oluşturulur.
+    - Paket yönetim programlarının oluşturduğu dosya değiştirilirse veya direk olarak paketler kendi arayüzlerinden indirilirse, buraya otomatik olarak eklenir.
+    - Buradan paketlerin üzerine tıklanarak kaldırma ve güncelleme işlemleri yapılabilir.
+- `Program.cs`
+    - Programın ilk çalışmaya başladığı dosyadır. 
+    - Program çalıştırılınca, `Program.cs` içinde bulunan `Main()` metodu çalışır ve devamında ayarlar vs. yüklenerek program tam çalışır hale gelir.
+- `Startup.cs`
+    - Program içindeki tüm ana ayarlamaların yapıldığı dosyadır.
+    - İçinde temel olarak iki metot bulundurur.
+        - `ConfigureServices()`
+            - Program servislerinin ayarlamalarının yapıldığı alandır.
+            - Web host, `Configure()` metodunu çağırmadan önce, ayarlamaları yapması için bu metodu çalıştırır.
+            - Opsiyoneldir.
+        - `Configure()`
+            - Programa gelen isteklerin (request) işlenmesi için gerekli yol haritasının çizildiği alandır.
+            - Zorunludur.
 
 ### 06) Paket Yönetimi
 
