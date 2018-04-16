@@ -26,9 +26,9 @@
 
 Aşağıdaki resimden de görüleceği üzere, .NET Core yapısı ortaya çıktıktan sonra da bazı sorunlar devam etti. Bu sorunların en temelinde, .NET Core ve diğer yapılar için kullanılan kütüphane yapılarının birbirinden bağımsız olmasıydı. Bu sorundan ötürü Microsoft, `.NET Standart` adlı yapıyı çıkarıp, tüm kütüphane yapılarını bu çatı altında toplamıştır. Bu sayede herhangi bir platform için sadece bir kütüphane yapısı kullanılabilir hale gelmiştir.
 
-<center>.NET Standart Öncesi</center> | <center>.NET Standart Sonrası</center>
---- | ---
-<p align="center"><img src="assets/12.png" style="max-height:350px" /></p> | <p align="center"><img src="assets/13.png" style="max-height:350px" /></p>
+| <center>.NET Standart Öncesi</center> | <center>.NET Standart Sonrası</center> |
+| --- | --- |
+| <p align="center"><img src="assets/12.png" style="max-height:350px" /></p> | <p align="center"><img src="assets/13.png" style="max-height:350px" /></p> |
 
 ### 01) .NET Core ile .NET Framework Arasındaki Farklar
 
