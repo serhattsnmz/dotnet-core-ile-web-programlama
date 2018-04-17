@@ -156,9 +156,9 @@ public class EfAddressRepository : EfGenericRepository<Address>, IAddressReposit
     - Ayrı ayrı enjekte edilen yapıların ayrı ayrı DbContext öğeleri oluşturmak yerine, sadece bir tane nesne oluşturup bunun üzerinde işlemler yapmak. 
 - Burada asıl olarak yaptığımız, tüm repository öğelerini tek bir öğe halinde birleştirmek ve bu öğenin hizmetine tek bir tane DbContext öğesi atamaktır.
 
-<center>Wihtout UoW</center> | <center>With UoW</center>
---- | ---
-<p align="center"><img src="assets/09.png" style="max-height:350px" /></p> | <p align="center"><img src="assets/10.png" style="max-height:350px" /></p>
+| <center>Wihtout UoW</center> | <center>With UoW</center> |
+| --- | --- |
+| <p align="center"><img src="assets/09.png" style="max-height:350px" /></p> | <p align="center"><img src="assets/10.png" style="max-height:350px" /></p> |
 
 #### Interface yapılandırılması
 
