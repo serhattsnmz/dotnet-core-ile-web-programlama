@@ -62,7 +62,7 @@ public ActionResult GetInfo(string name, string surname, int age)
 - Başka bir controller'a veri gönderme yöntemi
 
 #### AntiForgeryToken Kontrolü
-- CSRF zaafiyetlerini engellemek için kullanılan yöntemdir.
+- [XSRF/CSRF](https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-2.0) zaafiyetlerini engellemek için kullanılan yöntemdir.
 - Bu yöntem kullanıldığında, form client tarafına gönderilirken bir token oluşturulur ve bu token session üzerinde kaydedilir.
 - Kullanıcı formu post ettiğinde, bu token app tarafına gönderilir.
 - Controller çalışmadan önce bu token'ın, session üzerinde kaydedilen token ile eşleştirilmesi yapılır. Eğer token uyumsuz ise geçişe izin verilmez.

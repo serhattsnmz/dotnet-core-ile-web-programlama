@@ -1,3 +1,6 @@
+- ASP.NET Core Application Lifecycle
+    - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-2.1&tabs=aspnetcore2x
+
 - Tag helperslar
     - asp-items ve ListItem nesnesi (Yer işaretlerine bakılacak.)
 - Startup.cs içindeki metotların ayrıntılı anlamları
@@ -14,7 +17,11 @@
 
 - BundleConfig ayarlamalarının yapılması (db önceki notlar)
 
-- Db örnek verileri eklemek için yazılan seed metodu eklenecek
+- Program başlangıcında çalışacak metotlar oluşturma.
+
+- IApplicationBuilder, IHostingEnvironment, IServiceCollection metotlarının ayrıtıları.
+- WebHostBuilder ayarlamaları.
+    - https://wildermuth.com/2017/07/06/Program-cs-in-ASP-NET-Core-2-0
 
 - Root dizini alma yöntemleri. wwwroot dizininin nasıl alınacağı? Bu dizinin publish edildiğinde root files olarak bulunup bulunmadığı
 

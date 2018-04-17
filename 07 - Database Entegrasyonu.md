@@ -66,7 +66,7 @@
     6. Interface ve Repository bağlantısının `Dependency Injection` ile `Startup.cs` içinde yapılması
     7. Controller içinde DI ile interface'in çekilmesi
 
-###  ADIM 01 - Veritabanı Sınıflarını ( Entities ) Oluşturma
+### ADIM 01 - Veritabanı Sınıflarını ( Entities ) Oluşturma
 - Tabloları oluştururken models dizini altında yeni bir `Entities` dizini açılıp kullanılabileceği gibi, yeni bir class library projesi de açılarak modellemeler oluşturulabilir.
 - Modellemeler oluşturulurken dikkat edilmesi gerekenler:
     - Her modelin bir ID'si olmalıdır.
@@ -174,6 +174,11 @@ namespace Project.Models.DAL
     - `"SERVER=<server_adı> ; DATABASE=<db_adı> ; UID=<kullanıcı_adı> ; PWD=<parola>"`
     - Buradaki bilgiler MSSQL kurulurken oluşturulan bilgilerdir.
     - Database girişinde windows auth ile giriş sağlanıyorsa, UID ve PWD yerine `Integrated Security=true` yazılarak giriş yapılabilir.
+- Local DB bağlantı string'i:
+    - `Server=(localdb)\\mssqllocaldb;Database=<db_adı>;Trusted_Connection=True`
+    - Lokal DB, `SQL Server Express Database Engine` yapısının sadeleştirilmiş halidir ve programlama anında hızlı bir şekilde kullanmayı amaçlar.
+    - Default olarak `C:/Users/<user>` altında bir `*.mdf` dosyası oluşturur ve burayı kullanır.
+    - `SQL Server Object Explorer` ile görüntülenebilir.
 - `Startup.cs` dosyasına aşağıdaki ayarlamaları giriyoruz.
 
 ```cs
@@ -318,3 +323,62 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+### 04 - Seed Metotlar
+
+- Seed metotlar, database oluşurken hazır verilerle birlikte oluşmasını sağlayan metotlardır.
+- Seed metot oluşturup programa tanıttıktan sonra program ilk çalıştığında bu metot da çalışır ve databese verileri daha önce girilmemişse, bu bilgiler database üzerinde oluşur.
+- Konsol veya NPM üzerinden `Update-Database` işlemi yapıldığında bu veriler işlenmez. Program ilk çalıştığında bu veriler işlenecektir.
+- Öncelikle statik bir class oluşturulup içine statik bir seed metot yazılır.
+- Yazılan metot içinde database kullanılacağı için bunu çekmek gereklidir.
+    - Database sınıfı, `Startup.cs` içinde tanımlanmış ayarlara bağlı olduğu için (örn bağlantı string) direk olarak kullanılmaz.
+    - Bu yöntemde `IServiceProvider` üzerinden çekilmiştir.
+        - `var context = serviceProvider.GetRequiredService<EfProjectContext>();`
+- `context.Database.Migrate();`
+    - Bu kısım otomatik olarak `Update-Database` işlemi yapmamızı sağlar.
+    - Kullanılması zorunlu değildir.
+- Bu yapıda, veriler `FakeData` eklentisi ile oluşturulmuştur.
+- Verilerin eklenmesi bittiğinde, `context.SaveChanges()` metoduyla değişiklikleri kaydetmemiz gerekmektedir.
+
+```cs
+public static class EfProjectContextSeed
+{
+    public static void AddPeople(IServiceProvider serviceProvider)
+    {
+        var context = serviceProvider.GetRequiredService<EfProjectContext>();
+        int peopleCount = 10;
+
+        context.Database.Migrate();
+
+        if (!context.Persons.Any())
+        {
+            for (int i = 0; i < peopleCount; i++)
+            {
+                context.Persons.Add(new Person
+                {
+                    Name = FakeData.NameData.GetFirstName(),
+                    Surname = FakeData.NameData.GetSurname()
+                });
+            }
+            context.SaveChanges();
+        }
+    }
+}
+```
+
+- Seed metodumuzu oluşturduktan sonra, bunu `Program.cs` dosyası içindeki `Main()` metoduna entegre etmemiz gerekmektedir.
+- Burada `var scope = host.Services.CreateScope()` işlemiyle yeni bir `ServiceProvider` türetip kullanıyoruz.
+
+```cs
+public static void Main(string[] args)
+{
+    var host = BuildWebHost(args);
+
+    using (var scope = host.Services.CreateScope())
+    {
+        var service = scope.ServiceProvider;
+        EfProjectContextSeed.AddPeople(service);
+    }
+
+    host.Run();
+}
+```
