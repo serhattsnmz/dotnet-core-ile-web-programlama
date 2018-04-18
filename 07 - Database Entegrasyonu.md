@@ -254,6 +254,8 @@ public void ConfigureServices(IServiceCollection services)
         - `dotnet ef migrations add <migration_name> -c <context_name>`
         - `dotnet ef database update -c <context_name>`
     - İlk migration işlemleri, direk `Migrations` dizini altında bulunurken, sonra yapılanlar bu dizin altında yeni bir dizin açılarak otomatik olarak oluşturulur.
+- Proje ilk çalıştırıldığında veya çalışırken (runtime) bekleyen migration işlemlerini kod yardımıyla update etmek istersek `context.Database.Migrate()` metodunu kullanabiliriz.
+    - Bu metot migration oluşturmaz, sadece bekleyen migration işlemlerini eşitler.
 
 ### ADIM 04 - Modellere Ait Interface Oluşturulması
 - Her tabloya ait CRUD işlemleri için bir interface tanımlanmalıdır.

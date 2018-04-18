@@ -1,15 +1,11 @@
 - ASP.NET Core Application Lifecycle
     - https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-2.1&tabs=aspnetcore2x
+    - .NET Core çalışma alt yapısı
+    - MIL - JIT Compiler vs. 
 
-- Tag helperslar
-    - asp-items ve ListItem nesnesi (Yer işaretlerine bakılacak.)
 - Startup.cs içindeki metotların ayrıntılı anlamları
 - Giriş kısmındaki kullanılabilir paket yöneticileri notu tamamlanacak.
 - asp.net kısmına ado.net ile ilgili notlar eklenecek.
-
-- Migration işlemlerinin otomatik hale getirilmesi
-    - Program içinde otomatik olarak migration ve update database nasıl yapılır? 
-    - Tüm migration kodlarına bakılıp notlara eklenecek
 
 - Settings dosyalarının yapılandırılması
     - https://www.c-sharpcorner.com/article/all-about-appsettings-json-in-asp-net-core-2-0/
@@ -51,11 +47,6 @@
         - Youtube videosu
 
 - Scaffolding nedir?
-- Uygulamanın çalışmaya başladıktan sonra sayfa açılana kadar olan süreci
-- .NET Core çalışma alt yapısı
-    - MIL - JIT Compiler vs. 
-
-- Önemli! : İlk projenin oluşturulması ve ilk hello world sayfası ile ilgili not eklenmesi gerekmektedir. Bunun için "Giriş" notuna bir section açılabilir.
 
 - IDesignTimeDbContext sınıfı araştırılacak.
 

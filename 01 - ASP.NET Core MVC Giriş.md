@@ -84,6 +84,7 @@ Aşağıdaki resimden de görüleceği üzere, .NET Core yapısı ortaya çıkt�
     - `dotnet run`
         - Projeyi çalıştırır.
 - İlk projenin ayarlamalarının yapılması ve basit bir MVC sayfası
+    - MVC yapısına uygun olarak ilk `Hello World` uygulaması yapılması.
 - İlk ayarlamada `Startup.cs` dosyasının içeriği aşağıdaki gibi olmalıdır:
 
 ```cs
