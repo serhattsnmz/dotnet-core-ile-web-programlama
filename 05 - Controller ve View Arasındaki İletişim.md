@@ -3,9 +3,60 @@
 ### 1) Controller'dan View'e Veri Gönderme
 - 3 Yöntem vardır:
     - `ViewData`
+        - Daha sonra daha kolay kullanım için `ViewBag` yapısına geçmiştir.
+        - `ViewDataDictionary` yapısındadır.
     - `ViewBag`
+        - Controller'dan bilgilerin View üzerine gönderilmesi için kullanılır.
+        - Arka planda `ViewData` kullanır.
+        - `Dynamic` yapıdadır.
+            - Okunduğu zaman veri tipini kazanır.
+            - Bu yapısı nedeniyle kullanıldığı zaman tür dönüşümü yapılması *zorunlu değildir.*
+        - Süresi yoktur, sadece view'a kadar ilerleyebilir.
     - `TempData`
-- Aralarındaki farklar ve taşıma ömürleri
+        - `ITempDataDictioanry` yapısındadır.
+        - Bilgileri, okunana kadar saklar.
+        - Okuma yapıldıktan sonra `silinecek` olarak işaretlenip, **request sonunda** silinir.
+        - `Silinecek` olarak işaretlenmesini engellemek için `Peek(<key>)`, işaretlendikten sonra işaretini kaldırmak için `Keep(<key>)` metotları kullanılabilir.
+        - Saklanması: 
+            - `CookieTempDataProvider` nesnesi yaratılır.
+            - Bu nesne `Base64UrlTextEncoder` ile encode edilir.
+            - Encode edilen nesne default olarak `Cookie`'de saklanır.
+        - `Cookie-Based TempData Provider` default gelir, istenilirse bu yapı, `Session-Based TempData Provider` olarak değiştirilebilir.
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    // Session-Based
+    services.AddMvc().AddSessionStateTempDataProvider();
+
+    // Cookie-Based (Default)
+    // services.AddMvc().AddCookieTempDataProvider();
+
+    services.AddSession();
+}
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+{
+    app.UseSession();
+    app.UseMvcWithDefaultRoute();
+}
+
+```cs
+//second request, PEEK value so it is not deleted at the end of the request
+object value = TempData.Peek("value");
+
+//third request, read value and mark it for deletion
+object value = TempData["value"];
+```
+
+```cs
+//second request, get value marking it from deletion
+object value = TempData["value"];
+//later on decide to keep it
+TempData.Keep("value");
+
+//third request, read value and mark it for deletion
+object value = TempData["value"];
+```
 
 ### 2) View’dan Controller’a Veri Gönderme
 - View'dan Controller'a veri gönderim 3 şekilde olur (Request):
