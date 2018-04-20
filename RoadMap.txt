@@ -52,6 +52,7 @@
 
 - Idendity Core ile ilgili not hazırlanacak
     - 155. Setting up Idendity Core notuna bir daha bakılacak.
+    - Cookie Authentication In ASP.net Core 2.0
 
 - Metadata olarak UIHint araştırılacak.
 
