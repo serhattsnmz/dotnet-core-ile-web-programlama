@@ -190,6 +190,8 @@ var cookie = MyCookieExp.ReadCookie(HttpContext, "name");
 ### 03 - Cache 
 
 - Caching mekanizması, herhangi bir veriyi cevap olarak daha hızlı döndürmek için, bu veriyi RAM üzerinde saklama ve gerektiğinde geri döndürme işlemidir.
+    - Ayrıntılı bilgi için şu kaynağa bakılabilir:
+        - https://www.devtrends.co.uk/blog/a-guide-to-caching-in-asp.net-core
 - Globaldir. Her kullanıcı aynı bilgileri görür.
 - Statik değişkenlerden farkı, burada süre belirtebiliyoruz.
 - İsteğimiz dışımızda, server alan açmaya zorlandığında yine bu cache’ler silinebilir.
