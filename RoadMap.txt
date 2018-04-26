@@ -3,6 +3,10 @@
     - .NET Core çalışma alt yapısı
     - MIL - JIT Compiler vs. 
 
+- External class içinde database bağlantısı nasıl yapılır?
+    - Burada yapılacak şeylerden biri, context kısmını direk olarak dışarıdan almak.
+    - Kullanılacağı yerde db bağlantısı yapılıp buraya verilebilir.
+
 - Startup.cs içindeki metotların ayrıntılı anlamları
 - Giriş kısmındaki kullanılabilir paket yöneticileri notu tamamlanacak.
 - asp.net kısmına ado.net ile ilgili notlar eklenecek.
