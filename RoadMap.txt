@@ -60,6 +60,9 @@
 
 - Metadata olarak UIHint araştırılacak.
 
+- dotnet CLI commands
+    - https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x
+
 - Core ile Docker kullanımı
     - Vagrant üzerinde deployment
     - Azure ve Amazon üzerinde deployment
