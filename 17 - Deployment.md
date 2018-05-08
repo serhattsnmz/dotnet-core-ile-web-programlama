@@ -1,5 +1,20 @@
 ## DEPLOYMENT
 
+- Core projesinin deployment süreci basit olarak 3 temel adımda gerçekleşir:
+    1. Projenin dizine publish edilmesi ve barındıracak host üzerine gönderilmesi.
+        - Publish işlemi, projenin derlenip, Release sürümünün statik dosyalarla birlikte bir dizine veya ftp üzerinden belirlenen bir alana çıkarılması işlemidir.
+    2. Host üzerinde, servis oluşturulması
+        - Dotnet Core projesi, temelinde bir konsol uygulaması olduğundan, server reboot veya programın çökmesi durumda tekrar başlatılması gerekmektedir.
+        - Host üzerinde bu işlemler için bir servis yazıp, yukarıdaki durumlarda uygulamamızın tekrar başlatılmasını sağlamamız gerekmektedir.
+    3. Reverse Proxy kurulumu
+        - Core uygulaması, kendi içinde `Kestel` adlı bir web server bulundurmaktadır.
+        - Kestel, tüm web server işlemlerini ve statik dosya yönlendirmesi gibi işlemleri kendi içinde oluşturmaktadır.
+        - Bununla birlikte, 5000 portundan dinleme yapan Kestel'i, herhangi bir proxy aracılığıyla istediğimiz bir portu (web için genellikle 80) dinlemeye ayarlamamız gerekmektedir.
+        - Bunun için genellikle kullandığımız Reverse Proxy Server'lar:
+            - IIS
+            - Nginx
+            - Apache
+
 ### 01 - Projeyi Yayınlama Yöntemleri
 
 Dotnet Core projeleri temel olarak iki şekilde yayınlanabilir:
@@ -156,3 +171,9 @@ Options:
     - Bağlantı stringi, log ayaları vb gibi ayaların bulunduğu json dosyasıdır.
 - `wwwroot`
     - Statik dosyaların bulundugu dizindir.
+
+### 03 - Linux Server Ayarlamaları (Ubuntu 16.04)
+
+- **Server üzerine .NET Core SDK kurulumu**
+    - [Kurulum Adımları](https://www.microsoft.com/net/download/linux-package-manager/ubuntu16-04/sdk-current)
+- **FTP Server kurulumu ve dosyaların FTP üzerinden Hosta yüklenmesi**
