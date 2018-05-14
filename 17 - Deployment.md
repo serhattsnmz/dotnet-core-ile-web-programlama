@@ -174,6 +174,84 @@ Options:
 
 ### 03 - Linux Server Ayarlamaları (Ubuntu 16.04)
 
+- Dosya Transfer
+- SDK
+- Nginx
+- Test
+- Servis yazılması
+
+#### Dosyaların Transfer Edilmesi
+
+- Öncelikle, üst kısımda anlattığımız gibi publish ettiğimiz dosyaların, sunucu üzerine gönderilmesi gerekmektedir.
+- Bunun için sunucumuza [FTP Server kurabileceğimiz](BONUS%20-%20FTP%20Server%20Kurulumu.md) gibi, SSH üzerinden de FTP bağlantısı yapıp dosyalarınızı gönderebilirsiniz.
+
+#### Dotnet SDK Kurulumu
+
+- Bu adım, eğer projenizi 
+
+
+#### Reserve Proxy Kurulumu
+
+- Reserver proxy için **Nginx, ISS, Apache** vb. kurabilirsiniz.
+- Nginx kullanımı için öncelikle Nginx kurulumunu yapıyoruz.
+
+```
+sudo apt-get install nginx
+```
+
+- Nginx'i kurduktan sonra servisini başlatmamız gerekmektedir.
+
+```
+sudo service nginx start
+```
+
+- Servisi başlattıktan sonra, server ip adresine herhangi bir yerden bağlandığımızda, aşağıdaki gibi Nginx default sayfasını görmemiz gerekmetedir. Eğer bu sayfayı görüyorsak herhangi bir hata olmadan servisin kurulduğunu anlayabiliriz.
+
+<p align="center">
+    <img src="assets/17.png">
+</p>
+
+- Nginx kurulumunu yaptıktan sonra, default olarak 5000 portundan dinleme yapan Core projemizi, Nginx ile 80 portuna proxy yönlendirmesi yapmamız gerekmektedir.
+    - Öncelikle default Nginx ayarlarının dosya ismini değiştiriyoruz
+        - `mv /etc/nginx/sites-available/default /etc/nginx/sites-available/defaultOriginal`
+    - Daha sonra yeniden bir ayar dosyası oluşturup aşağıdaki kodları içine yapıştırıyoruz.
+        - `nano /etc/nginx/sites-available/default`
+
+```
+server {
+    listen 80;
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection keep-alive;
+        proxy_set_header Host $http_host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+- Ayarları yaptıktan sonra Nginx'i yeni ayarlarıyla test edip baştan başlatıyoruz.
+
+```
+$ sudo nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+$ sudo nginx -s reload
+```
+
+- Nginx'i tekrar başlattıktan sonra herhangi bir hata yoksa, dotnet projemizi başlatıp, server ip adresine direk bağlanıp projeye ulaşıp ulaşamadığımızı kontrol edebiliriz.
+
+
 - **Server üzerine .NET Core SDK kurulumu**
     - [Kurulum Adımları](https://www.microsoft.com/net/download/linux-package-manager/ubuntu16-04/sdk-current)
 - **FTP Server kurulumu ve dosyaların FTP üzerinden Hosta yüklenmesi**
+
+
+apt list --installed | grep dotnet
+
+
+NOT! : 
+- apt install libicu-dev
+- apt install libunwind-dev
