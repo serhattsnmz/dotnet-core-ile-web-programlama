@@ -63,6 +63,9 @@
 - dotnet CLI commands
     - https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x
 
+- App Secure kısmına bakılacak 
+    - https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/linux-nginx?view=aspnetcore-2.0&tabs=aspnetcore2x#securing-the-app
+
 - Core ile Docker kullanımı
     - Vagrant üzerinde deployment
     - Azure ve Amazon üzerinde deployment

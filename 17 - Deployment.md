@@ -174,21 +174,91 @@ Options:
 
 ### 03 - Linux Server Ayarlamaları (Ubuntu 16.04)
 
-- Dosya Transfer
-- SDK
-- Nginx
-- Test
-- Servis yazılması
+#### Self-Contained Deployment
 
-#### Dosyaların Transfer Edilmesi
+1. Proje dosyası yukarıda anlatıldığı şekilde, `Self-Contained` olarak dosyaya yayınlanır.
+2. Yayınlanan dosyalar server üzerine gönderilir.
+    - Bunun için sunucumuza [FTP Server kurabileceğimiz](BONUS%20-%20FTP%20Server%20Kurulumu.md) gibi, SSH üzerinden de FTP bağlantısı yapıp dosyalarınızı gönderebilirsiniz.
+3. Proje kütüphanelerini ekleme ve çalıştırma
+    - Proje `dotnet` dahil olmak üzere tüm kütüphane yapılarını içinde bulundurduğundan, server üzerine herhangi bir kütüphane kurmaya gerek yoktur.
+    - Proje içinde gelen `libxxx.so` kitaplıklarının `ldd` komutu ile sisteme eklenmesi gerekmektedir.
+    - Daha sonra uygulama dosyası direk çalıştırılarak dotnet projesinin çalıştığını görebiliriz.
 
-- Öncelikle, üst kısımda anlattığımız gibi publish ettiğimiz dosyaların, sunucu üzerine gönderilmesi gerekmektedir.
-- Bunun için sunucumuza [FTP Server kurabileceğimiz](BONUS%20-%20FTP%20Server%20Kurulumu.md) gibi, SSH üzerinden de FTP bağlantısı yapıp dosyalarınızı gönderebilirsiniz.
+```bash
+# Kütüphaneleri sisteme ekleme
+$ ldd lib*.so
 
-#### Dotnet SDK Kurulumu
+# İstenilirse çalıştırılacak dosya yolu path olarak eklenebilir.
+# "proje" > dotnet ana dosyasıdır.
+$ export PATH=$PATH:/var/www/CoreProje/
 
-- Bu adım, eğer projenizi 
+# Dotnet dosyasının çalıştırılması
+$ proje
 
+Hosting environment: Production
+Content root path: /var/www/CoreProje/proje
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+...
+```
+
+> **NOT:** Self-contained olarak server üzerine kopyalanmış dosyalar çalıştırıldığında hata ile karşılaşılırsa, aşağıdaki iki kütüphanenin kurulması önerilir.
+
+```
+$ ./proje 
+Failed to load ***, error: libunwind.so.8: cannot open shared object file: No such file or directory
+Failed to bind to CoreCLR at '/var/www/libcoreclr.so'
+
+$ apt install libicu-dev
+$ apt install libunwind-dev
+
+$ ./proje 
+warn: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[35]
+      No XML encryptor configured. Key {61d5203f-7b87-4911-bb68-126a09425473} may be persisted to storage in unencrypted form.
+Hosting environment: Production
+Content root path: /var/www
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+```
+
+4. Reverse Proxy kurulur ve ayarlamaları yapılır.
+5. Herhangi bir nedenden ötürü server veya uygulama kapanırsa tekrardan başlaması için gerekli olan servis dosyası oluşturulur ve çalıştırılır.
+
+#### Framework-Dependent Deployment
+
+1. Proje dosyası yukarıda anlatıldığı şekilde, `Framework-Dependent` olarak dosyaya yayınlanır.
+2. Yayınlanan dosyalar server üzerine gönderilir.
+    - Bunun için sunucumuza [FTP Server kurabileceğimiz](BONUS%20-%20FTP%20Server%20Kurulumu.md) gibi, SSH üzerinden de FTP bağlantısı yapıp dosyalarınızı gönderebilirsiniz.
+3. Dotnet kütüphane kurulumları yapılır.
+    - Kütüphaneler iki farklı yöntemle kurulabilir:
+        1. `Dotnet Runtime` + `Dotnet Hosting` kurulabilir.
+        2. Geliştirici araçları da dahil olmak üzere her şeyi bulunduran `Dotnet SDK` kurulabilir.
+    - Son sürüm kütüphaneleri Linux üzerinde görüntülemek için basitçe `apt search dotnet` komutu çalıştırılabilir.
+
+```bash
+$ apt search dotnet
+
+dotnet-hosting-2.0.8/xenial,now 2.0.8-1 amd64 [installed]
+  Microsoft .NET Core 2.0.8 Linux Server Hosting
+
+dotnet-runtime-2.1.0-rc1/xenial,now 2.1.0-rc1-1 amd64 [installed]
+  Microsoft .NET Core Runtime - 2.1.0 Release Candidate 1 Microsoft.NETCore.App 2.1.0-rc1
+
+dotnet-sdk-2.1.4/xenial 2.1.4-1 amd64
+  Microsoft .NET Core SDK - 2.1.4
+
+...
+
+# 1. Yöntem
+$ sudo apt install dotnet-runtime-2.1.0-rc1
+$ sudo apt install dotnet-hosting-2.0.8
+
+# 2. Yöntem
+$ sudo apt install dotnet-sdk-2.1.4
+```
+
+4. Reverse Proxy kurulur ve ayarlamaları yapılır.
+5. Herhangi bir nedenden ötürü server veya uygulama kapanırsa tekrardan başlaması için gerekli olan servis dosyası oluşturulur ve çalıştırılır.
 
 #### Reserve Proxy Kurulumu
 
@@ -244,14 +314,51 @@ $ sudo nginx -s reload
 - Nginx'i tekrar başlattıktan sonra herhangi bir hata yoksa, dotnet projemizi başlatıp, server ip adresine direk bağlanıp projeye ulaşıp ulaşamadığımızı kontrol edebiliriz.
 
 
-- **Server üzerine .NET Core SDK kurulumu**
-    - [Kurulum Adımları](https://www.microsoft.com/net/download/linux-package-manager/ubuntu16-04/sdk-current)
-- **FTP Server kurulumu ve dosyaların FTP üzerinden Hosta yüklenmesi**
+#### Servis Yazılması
 
+- Öncelikle servise dosyasını oluşturuyoruz.
 
-apt list --installed | grep dotnet
+```
+$ sudo nano /etc/systemd/system/core.service
+```
 
+- Daha sonrasında dosyanın içine aşağıdaki satırları ekliyoruz.
+    - **Description:** Servis açıklaması
+    - **WorkingDirectory:** Çalışma dizini. App dosyalarımızın olduğu dizini vermemiz gerekmektedir.
+    - **ExecStart:** Konsolda uygulamamızı çalıştırmak için kullandığımız `dotnet helloworld.dll` komutunun tam yol olarak belirtildiği yerdir.
+    -  
+```
+[Unit]
+Description=Example .NET Web API App running on Ubuntu
 
-NOT! : 
-- apt install libicu-dev
-- apt install libunwind-dev
+[Service]
+WorkingDirectory=/var/aspnetcore/hellomvc
+ExecStart=/usr/bin/dotnet /var/aspnetcore/hellomvc/hellomvc.dll
+Restart=always
+RestartSec=10
+SyslogIdentifier=dotnet-example
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
+```
+
+- Dosyayı kaydettikten sonra, servisi aktifleştirmemiz ve başlatmamız gerekmektedir.
+
+```
+$ systemctl enable kestrel-hellomvc.service
+$ systemctl start kestrel-hellomvc.service
+$ systemctl status kestrel-hellomvc.service
+
+● kestrel-hellomvc.service - Example .NET Web API App running on Ubuntu
+    Loaded: loaded (/etc/systemd/system/kestrel-hellomvc.service; enabled)
+    Active: active (running) since Thu 2016-10-18 04:09:35 NZDT; 35s ago
+Main PID: 9021 (dotnet)
+    CGroup: /system.slice/kestrel-hellomvc.service
+            └─9021 /usr/local/bin/dotnet /var/aspnetcore/hellomvc/hellomvc.dll
+```
+
+- Servisi aktifleştirdikten sonra, web uygulamamız otomatik olarak başlayacaktır.
+- Servisin log dosyasına bakmak için `sudo journalctl -fu <service_name>` komutu kullanılabilir.
