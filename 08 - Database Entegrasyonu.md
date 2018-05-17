@@ -384,3 +384,16 @@ public static void Main(string[] args)
     host.Run();
 }
 ```
+
+### 05 - Geçici Database Oluşturma
+
+- Hızlı çözümler için bellekte çalışacak ve program kapandığında verilerin kaybolacağı bir yapılanma kurabiliriz.
+- Bunun için `UseInMemoryDatabase()` metodunu kullanabiliriz.
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddDbContext<ExampleContext>(opt=>opt.UseInMemoryDatabase("ExampleDB"));
+    services.AddMvc();
+}
+```
