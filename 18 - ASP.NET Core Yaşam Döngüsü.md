@@ -1,4 +1,4 @@
-## ASP.NET CORE GENEL BİLGİLER VE YAŞAM DÖNGÜSÜ
+## ASP.NET CORE YAŞAM DÖNGÜSÜ
 
 ### 01 - Genel Bilgiler
 
@@ -32,6 +32,12 @@ namespace aspnetcoreapp
     - Bu ayarlamalar, `UseStartup()`, `UseKestrel()` gibi metotlarla yapılandırılır.
     - Default builder ayarlamsında Kestel web server otomatik olarak seçilmiş olur.
     - `Build()` ve `Run()` metotlarıyla `IWebHost` türünde bir host oluşturulup, HTTP istekleri dinlenmeye başlanır.
+- Dotnet Core ile yazılmış bir programı çalıştırdığımızda, çalışma sırası aşağıdaki şemadaki gibidir.
+    - NOT : Middleware'ler, program çalıştığında çalışmaz. Request geldiğinde ve response döndüğünde çalışır. 
+
+<p align="center">
+    <img src="assets/19.png">
+</p>
 
 ### 02 - Application Startup
 
