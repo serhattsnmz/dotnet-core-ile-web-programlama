@@ -291,3 +291,12 @@ public class Home2Controller : Controller
     }
 }
 ```
+
+
+### 04 - Onion Architecture
+
+- Katmanların iç içe olduğu ve her katmanın sadece kendi üstündeki katmanı gördüğü tasarım mimarisidir.
+
+<p align="center">
+    <img src="assets/20.png">
+</p>
