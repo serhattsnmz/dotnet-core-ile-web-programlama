@@ -265,3 +265,126 @@ public void ConfigureServices(IServiceCollection services)
 ### 03 - Dependency injection in ASP.NET Core (Services)
 
 - [Dependency Injection Nedir?](BONUS%20-%20Dependency%20Injection%20Nedir.md)
+- Dotnet Core içinde, DI işlemleri default olarak gelmektedir.
+- DI işlemleri, `Startup.cs` içindeki `ConfigureServices` metoduna servislerin tanımlanması ve tanımlanan servislerin `Request Pipeline` boyunca ilgili yerlere enjekte edilmesiyle sağlanır.
+- Bu işlemler, dotnet core içinde gömülü halde gelen ve default olarak `constructor injection` (Yapıcı Metot ile DI) DI metodunu destekleyen, `IServiceProvider` arayüzünü kullanarak gerçekleştirilir.
+    - `ConfigureServices` metodunda bu arayüze eklemeler yapılır ve ilgili yerlerde bu arayüzden servisler çekilerek (`GetRequeiredService`) kullanılır. 
+    - Aşağıdaki örnekte, basit olarak bir database ve örnek servisin eklenmesi, database servisinin aynı zamanda örnek sınıf içinde çekilerek kullanımı gösterilmiştir.
+
+```cs
+// Startup.cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddScoped<ExampleClass>();
+    services.AddScoped<IDatabaseService, EfDatabaseService>();
+
+    services.AddMvc();
+}
+```
+
+```cs
+namespace Project.WebUI.Library.Functions
+{
+    public class ExampleClass
+    {
+        private readonly IServiceProvider provider;
+
+        public ExampleClass(IDatabaseService _db, IServiceProvider _provider)
+        {
+            provider = _provider;
+        }
+
+        public void AddPerson(string name)
+        {
+            IDatabaseService database = provider.GetRequiredService<IDatabaseService>();
+
+            database.People.Add(new Person { Name = name });
+            database.SaveChanges();
+        }
+    }
+}
+```
+
+- Uygulama içinde kullanılacak her servisin öncelikle `ConfigureServices` metodu içinde tanıtılması gerekir. Bununla birlikte [bazı servisler](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.0#using-framework-provided-services) default olarak tanımlanmış halde gelirler. Bu servisler ayrıca tanımlanmadan direk olarak kullanılacağı yerde enjekte edilebilirler.
+
+#### Servislerin Tanıtılması
+
+- Servisler basit olarak aşağıdaki gibi tanıtılabilir.
+
+```cs
+services.AddTransient<IEmailSender, AuthMessageSender>();
+services.AddTransient<ISmsSender, AuthMessageSender>();
+```
+
+- Burada;
+    - `Add<xxx>` olarak yazılan metot, belirli bir ömre göre servisi ekleyen metottur.
+    - Metodun ilk generic tipi, konteynır yapılarının isteyeceği türü belirtir.
+        - Bu yapı genellikle `interface` yapısındadır.
+    - Metodun ikinci generic tipi, ilk tip istendiğinde oluşturulacak ve servis olarak sunulup kullanılacak `concrete` tipi belirtir.
+        - Bu yapı `class` yapısındadır.
+- Bu yapılar dışında tek bir generic tip olarak da servisler tanıtılabilir.
+
+```cs
+services.AddTransient<AuthMessageSender>();
+```
+
+- Burada;
+    - Yapı sadece generic olarak `concrete` class yapısında olduğundan, konteynır yapılarının direk olarak bu yapıyı istemesi gerekmektedir.
+    - DI mantığına aykırı olduğundan bu yapı fazla kullanılmaz.
+- Bunlar dışında custom servisler extension metot olarak da eklenip kullanılabilir.
+
+```cs
+// Extension method
+public static class ExampleServiceExtension
+{
+    public static IServiceCollection AddFunctionService(this IServiceCollection service)
+    {
+        return service.AddScoped<ExampleService>();
+    }
+}
+
+// Startup.cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddFunctionService();
+    services.AddMvc();
+}
+```
+
+#### Servis Ömürleri
+
+- Servisler tanımlanırken belirli bir ömre göre tanıtılırlar. Bu ömürler, ilgili container servisi çağırdığında, servis nesnelerinin ne zaman yaratılacağını belirler.
+    - Servislerin `Constructor` metotlarının, nesne yaratıldığında oluştuğu unutulmamalıdır.
+- Bu ömürler üçe ayrılır:
+    - `Transient`
+        - Servis her istendiğinde, yeni bir nesne yaratılır.
+        - Özellikle stateless servisler için best-practice olarak kullanılır.
+    - `Scoped`
+        - Her bir scope (request) için bir tane nesne yaratır ve request sonuna kadar o nesneyi kullanır.
+        - Request lifecycle boyunca hep aynı nesne kullanılır.
+        - Request boyunca stateful bir yapı sağlanması istenirse, bu yöntem kullanılır.
+        - > **NOT** : Eğer scoped servisler middleware içinde kullanılacaksa, bu servisler `Invoke` ve `InvokeAsync` metotlarına parametre olarak enjekte edilmelidir. Contructor metot ile enjekte edilirse, bu durum servisin singleton gibi davranmasını isteyeceğinden kullanılmaz.
+        - > **NOT** : Entity Framework kullanan servislerin `Scoped` ile eklenmesi gerekmektedir.
+    - `Singleton`
+        - İsminden de anlaşılacağı üzere singleton yani uygulama ilk çalıştığında tek bir nesne yaratır ve sonrasında uygulama stop olana kadar bu instance kullanılır.
+
+#### Scoped servislerlere program başlangıcında ulaşma
+
+- Bunun için, `CreateScope()` metodu ile scope servislerine ulaşılır ve oluşan nesneden türetilen `ServiceProvider` ile servisler kullanılabilir.
+- Program başlangıcında scoped servislere ulaşıp kullanmak için kullanılan bir yöntemdir.
+
+```cs
+public static void Main(string[] args)
+{
+    var host = BuildWebHost(args);
+
+    using (var serviceScope = host.Services.CreateScope())
+    {
+        var services = serviceScope.ServiceProvider;
+        var serviceContext = services.GetRequiredService<MyScopedService>();
+        // Use the context here
+    }
+
+    host.Run();
+}
+```

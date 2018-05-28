@@ -226,6 +226,42 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+#### Bağlantı bilgilerinin context sınıfı içinde oluşturulması
+
+- Yukarıda anlatılan kısımlarda, bağlantı tanımlaması `Startup.cs` içinde veya `appsettings.json` içinde tanımlanıyordu.
+- Bunun dışında, bağlantı tanımlanması direk olarak Context sınıfı içinde de yapılabilir.
+
+```cs
+public class EfProjectContext : DbContext
+{
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(
+            "Server=(localdb)\\mssqllocaldb;Database=ExampleProject;Trusted_Connection=True"
+            );
+    }
+
+    public DbSet<Person> People { get; set; }
+    public DbSet<Address> Addresses { get; set; }
+}
+```
+
+```cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();
+    services.AddDbContext<ProjectContext>();
+}
+```
+
+> **NOT** : `UseSqlServer` metodu kullanıldında bulunamıyor veya hata alınıyorsa, bu kütüphanenin projeye dahil edilmesi gerekmektedir. Bunun için projenin `.csproj` dosyası içine aşağıdaki kodların girilmesi gerekmektedir.
+
+```xml
+<ItemGroup>
+    <PackageReference Include = "Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
+</ItemGroup>
+```
+
 ### ADIM 03 - Migration İşlemleri
 - Migration işlemleri, database ile modellerimizin arasındaki farkın bulunması ve database güncellenmeden önce hangi işlemlerin yapılacağının çözümlendiği işlemdir.
 - Migration işlemleri iki yolla yapılabilir:
