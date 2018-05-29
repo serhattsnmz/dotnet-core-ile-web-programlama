@@ -1,6 +1,5 @@
 ## TAGHELPERS
 
-- https://dannyvanderkraan.wordpress.com/2016/04/19/asp-net-core-1-0-goodbye-html-helpers-and-hello-taghelpers/
 - Tag helper'lar, .NET Core (Core 1.0 - MVC 6) ile birlikte, Html helper kullanımlarının yerini almış yapılardır.
 - Daha esnek ve html dostu bir yazım sağladığı için, bu yapıları html helper yapılarına tercih ediyoruz.
 - Temel amacı, html kodlarını hızlıca yamamıza olanak sağlamasıdır.
@@ -26,7 +25,7 @@
 - Eğer element düzeyinde tag helper'ların kaldırılması isteniyorsa, `!` ünlem işareti kullanılabilir.
     - Bu işaretin hem başlangıç hem de kapanış tagında kullanılması gerekmektedir.
 
-```html
+```
 <!span asp-validation-for="Email" class="text-danger"></!span>
 ```
 
@@ -648,8 +647,3 @@ public class WebsiteInformationTagHelper : TagHelper
     </section>
 -->
 ```
-
-### Kaynaklar : 
-
-- https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/image-tag-helper
-- https://dannyvanderkraan.wordpress.com/2016/04/19/asp-net-core-1-0-goodbye-html-helpers-and-hello-taghelpers/

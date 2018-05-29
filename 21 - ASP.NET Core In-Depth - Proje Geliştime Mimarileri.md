@@ -1,4 +1,4 @@
-## DATABASE ENTEGRASYON MİMARİLERİ
+## PROJE GELİŞTİRME MİMARİLERİ
 
 - Database modellemesi yapılırken ve bu yapılar proje içinde kullanılırken kullanacağımız bu yöntemler, hem proje yönetilebilirliğini arttırmak hem de kod tekrarını engellemek için kullanacağımız yöntemlerdir.
 

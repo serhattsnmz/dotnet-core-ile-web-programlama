@@ -131,7 +131,3 @@ services.AddTransient<IPersonRepository, SQLPersonRepository>();
 - Uygulama çalışma anında sizlere daha rahat configuration yapma şansı tanıyacak. Mesela, XML kullanarak hangi interface ile hangi sınıfın birbirlerine bağlı olacağını kolayca tanımlayabilirsiniz. Bu farklı müşterilen farklı isteklerini kodunuzu değiştirmek zorunda kalmadan rahatlıkla sunabilmeniz demektir.
 - Hangi sınıfları kullanacağınızı bir yerden kontrol etmiş olacaksınız.
 - Belkide en önemlisi çok daha rahat Unit Test ler yazmanızı sağlamış olacağı. İstediğiniz sınıfı rahatlıkla mock ederek farklı kod kısımlarını test edebileceksiniz.
-
-#### Kaynaklar
-
-- https://medium.com/@atarikguney/dependency-injection-nedir-1124c15249ad

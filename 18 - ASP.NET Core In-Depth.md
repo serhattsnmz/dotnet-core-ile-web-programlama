@@ -1,4 +1,4 @@
-## ASP.NET CORE YAŞAM DÖNGÜSÜ
+## ASP .NET CORE IN-DEPTH
 
 ### 01 - Genel Bilgiler
 
@@ -264,7 +264,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### 03 - Dependency injection in ASP.NET Core (Services)
 
-- [Dependency Injection Nedir?](BONUS%20-%20Dependency%20Injection%20Nedir.md)
+- [Dependency Injection Nedir?](19%20-%20ASP.NET%20Core%20In-Depth%20-%20Dependecy%20Injection.md)
 - Dotnet Core içinde, DI işlemleri default olarak gelmektedir.
 - DI işlemleri, `Startup.cs` içindeki `ConfigureServices` metoduna servislerin tanımlanması ve tanımlanan servislerin `Request Pipeline` boyunca ilgili yerlere enjekte edilmesiyle sağlanır.
 - Bu işlemler, dotnet core içinde gömülü halde gelen ve default olarak `constructor injection` (Yapıcı Metot ile DI) DI metodunu destekleyen, `IServiceProvider` arayüzünü kullanarak gerçekleştirilir.
@@ -472,3 +472,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddSingleton   (new Service3());
 }
 ```
+
+### 04 - Middleware
+
+- [Middleware Notu](20%20-%20ASP.NET%20Core%20In-Depth%20-%20Middleware.md)
