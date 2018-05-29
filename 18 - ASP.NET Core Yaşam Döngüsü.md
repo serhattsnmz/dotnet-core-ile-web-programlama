@@ -367,6 +367,19 @@ public void ConfigureServices(IServiceCollection services)
         - > **NOT** : Entity Framework kullanan servislerin `Scoped` ile eklenmesi gerekmektedir.
     - `Singleton`
         - İsminden de anlaşılacağı üzere singleton yani uygulama ilk çalıştığında tek bir nesne yaratır ve sonrasında uygulama stop olana kadar bu instance kullanılır.
+- Servis içinde başka bir servis kullanırken ömürlere dikkat etmek gerekir:
+    - Singleton servis içinde;
+        - Singleton servis kullanılabilir.
+        - Scoped servis **kullanılamaz!**
+        - Transient servis kullanılabilir.
+    - Scoped servis içinde;
+        - Singleton servis kullanılabilir.
+        - Scoped servis kullanılabilir.
+        - Transient servis kullanılabilir.
+    - Transient servis içinde;
+        - Singleton servis kullanılabilir.
+        - Scoped servis kullanılabilir.
+        - Transient servis kullanılabilir.
 
 #### Scoped servislerlere program başlangıcında ulaşma
 
@@ -386,5 +399,76 @@ public static void Main(string[] args)
     }
 
     host.Run();
+}
+```
+
+#### Request Services
+
+- Tanıtılan servisler, `HttpContext` içinde bulunan `RequestServices` koleksiyonu içinde de bulunur.
+- İstenilirse bu koleksiyon içinden de servisler çekilip kullanılabilir.
+- Fakat bu yöntem ile direk servislerin çekilmesi pek sağlıklı değildir. Bunun yerine constructor metotlar kullanılarak enjekte edilip, framework yapısının kendisinin enjekte etmesine izin vermek daha doğrudur.
+- Bununla birlikte hızlı test yapılması istenildiği durumlarda bu yöntem kullanılabilir.
+
+```cs
+public class HomeController : Controller
+{
+    // Constructor Method Injection
+    private IDatabaseService database;
+    public HomeController(IDatabaseService _database)
+        => database = _database;
+
+    public IActionResult Index()
+    {
+        // Using services directly
+        IServiceProvider provider = this.HttpContext.RequestServices;
+        IDatabaseService db = provider.GetRequiredService<IDatabaseService>();
+
+        return View();
+    }
+}
+```
+
+#### Servislerin Dispose edilmesi
+
+- Container yapıları, kendi ürettikleri servisleri, eğer bu servisler dispose edilebiliyorsa (`IDisposable`'dan türemişse) yine kendileri dispose ederler.
+- Kendi üretmedikleri servisleri ise dispose edemezler. 
+- Örnek olarak;
+
+```cs
+// Services implement IDisposable:
+public class Service1 : IDisposable {}
+public class Service2 : IDisposable {}
+public class Service3 : IDisposable {}
+
+public interface ISomeService {}
+public class SomeServiceImplementation : ISomeService, IDisposable {}
+
+
+public void ConfigureServices(IServiceCollection services)
+{
+    // container will create the instance(s) of these types and will dispose them
+    services.AddScoped      <ISomeService, SomeServiceImplementation>();
+    services.AddSingleton   <ISomeService, SomeServiceImplementation>();
+    services.AddTransient   <ISomeService, SomeServiceImplementation>();
+
+    services.AddSingleton   <ISomeService>(sp => new SomeServiceImplementation());
+    services.AddScoped      <ISomeService>(sp => new SomeServiceImplementation());
+    services.AddTransient   <ISomeService>(sp => new SomeServiceImplementation());
+
+    services.AddSingleton   <SomeServiceImplementation>(sp => new SomeServiceImplementation());
+    services.AddScoped      <SomeServiceImplementation>(sp => new SomeServiceImplementation());
+    services.AddTransient   <SomeServiceImplementation>(sp => new SomeServiceImplementation());
+
+    services.AddScoped      <Service1>();
+    services.AddSingleton   <Service2>();
+
+
+    // container didn't create instance so it will NOT dispose it
+    services.AddSingleton   <ISomeService>(new SomeServiceImplementation());
+
+    services.AddSingleton   <SomeServiceImplementation>(new SomeServiceImplementation());
+
+    services.AddSingleton   <Service3>(new Service3());
+    services.AddSingleton   (new Service3());
 }
 ```
