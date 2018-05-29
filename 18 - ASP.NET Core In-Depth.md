@@ -476,3 +476,47 @@ public void ConfigureServices(IServiceCollection services)
 ### 04 - Middleware
 
 - [Middleware Notu](20%20-%20ASP.NET%20Core%20In-Depth%20-%20Middleware.md)
+
+### 05 - Statik Dosya Yönetimi
+
+- Statik dosyalar; HTML, CSS, resim dosyaları ve JS dosyalarına verilen genel bir addır.
+- Bu dosyalar dinamik değil de statik olduğundan, web programı üzerinden geçmeden direk response olarak döndürülebilir (Short-circuting).
+- Statik dosyalar, default olarak `<content_root>/wwwroot` dizini içinde barındırılır ve `UseWebRoot` metodu kullanılarak istenilirse dizin yolu değiştirilebilir.
+- Content root yolu, program başlangıcında `WebHost` yaratılırken belirtilmelidir.
+    - `WebHost.CreateDefaultBuilder` metodu kullanıldığında (default olarak bu metot çalışır), content root olarak o anki bulunan ana dizin ayarlanır.
+
+```cs
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BuildWebHost(args).Run();
+    }
+
+    public static IWebHost BuildWebHost(string[] args) =>
+        WebHost.CreateDefaultBuilder(args)
+            .UseStartup<Startup>()
+            .Build();
+}
+```
+
+- `wwwroot` altında bulunan dosyalara ulaşırken belirtilecek dosya yolları, wwwroot ismi dikkate alınmadan kullanılır.
+    - Örnek vermek gerekirse
+
+```
+Folders
+-------
+wwwroot
+    images
+        example.jpg
+    styles
+        example.css
+    scripts
+
+Using
+-----
+<img src="~/images/example.jpg" />
+<link rel="stylesheet" href="~/styles/example.css">
+```
+
+> **NOT** : `.NET Framework` altyapısı kullanılacaksa, `Microsoft.AspNetCore.StaticFiles`; `.NET Core` altyapısı kullanılacaksa `Microsoft.AspNetCore.All` paketlerinin projeye dahil olduğundan emin olmamız gerekmektedir.
