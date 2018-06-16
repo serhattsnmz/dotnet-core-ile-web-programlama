@@ -500,6 +500,16 @@ public class Program
 }
 ```
 
+- Statik dosyaları kullanmak için, bu servisi aktifleştirmek gerekir.
+    - Bunun için `Configure` metodu içinde `UseStaticFiles()` metodu ile aktifleştirme yapılmalıdır.
+
+```cs
+public void Configure(IApplicationBuilder app)
+{
+    app.UseStaticFiles();
+}
+```
+
 - `wwwroot` altında bulunan dosyalara ulaşırken belirtilecek dosya yolları, wwwroot ismi dikkate alınmadan kullanılır.
     - Örnek vermek gerekirse
 
