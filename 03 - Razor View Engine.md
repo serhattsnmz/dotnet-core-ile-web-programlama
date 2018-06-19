@@ -73,8 +73,8 @@
     - Html.BeginForm()
     - Html.TextBox() - Html.TextBoxFor()
     - Html.Label() - Html.LabelFor()
-    - Html.AntiForgeryToken()
     - ...
+- Html.BeginForm metodu kullanıldığında .NET Core'da otomatik olarak bir AntiForgeryToken oluşturulur.
 
 ### 03 - Custom Html Helpers
 - `IHtmlHelper` sınıfı içerisine extension metotlar yazarak istediğimiz custom helper'ları ekleyebiliriz.
