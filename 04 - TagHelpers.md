@@ -2,7 +2,7 @@
 
 - Tag helper'lar, .NET Core (Core 1.0 - MVC 6) ile birlikte, Html helper kullanımlarının yerini almış yapılardır.
 - Daha esnek ve html dostu bir yazım sağladığı için, bu yapıları html helper yapılarına tercih ediyoruz.
-- Temel amacı, html kodlarını hızlıca yamamıza olanak sağlamasıdır.
+- Temel amacı, html kodlarını hızlıca yazmamıza olanak sağlamasıdır.
 - **Html Helper yapılarından farklı olarak, genel olarak tüm elementi değil, sadece attribute'leri oluşturur.**
 
 ```html
@@ -41,7 +41,7 @@
 <th:input asp-for="Name" />                 => Tag Helper çalışır.
 ```
 
-### 01 - Anchor Tag Helper
+### 01 - Anchor Tag Helpers
 
 - **asp-action**
     - Bir action için yol oluşturur.
@@ -139,7 +139,7 @@ var parms = new Dictionary<string, string>
 ```
 
 - **asp-fragment**
-    - Url'i bir host üstünden gitmeye zorlar.
+    - Oluşturulan url üzerine site içi bir bağlantı ekler.
 
 ```html
 <a asp-fragment="about">About</a>
@@ -149,7 +149,7 @@ var parms = new Dictionary<string, string>
 -->
 ```
 
-### 02 - Form ve Input Tag Helper
+### 02 - Form ve Input Tag Helpers
 
 Form içinde, input elementleri için tag helperlar kullanılırsa, model özellikleri elemente otomatik olarak atanır. Bunlardan en temeli; *type*, *name*, *id* olmakla beraber, aynı zamanda model üzerinde validation işlemleri için tanımlanmış meta tagları da elemente eklenir. Bu şekilde, client-side validation için gerekli olan attribute'ler otomatik eklenmiş olur.
 
@@ -201,7 +201,7 @@ public IActionResult Index()
     - Validation bölümünda ayrıntılı açıklanacaktır.
 
 
-### 03 - Cache Tag Helper
+### 03 - Cache Tag Helpers
 
 - Html yapısının bir kısmını cache üzerinde tutarak performansı arttırmak için kullanılır.
 - Tutulduğu yer : Internal ASP.NET Core cache provider.
@@ -276,7 +276,7 @@ public IActionResult Index(string myParam1,string myParam2,string myParam3)
     - Bu silinmeler önceliğe göre olmaktadır.
     - İlk silinecek cache'ler, priorty özelliği low olanlardır.
 
-### 04 - Environment Tag Helper
+### 04 - Environment Tag Helpers
 
 - Belirlenen **hosting ortamına** göre, içindeki öğelerin dahil edilip edilmeyeceğini belirler.
 - Örneğin geliştirme ortamında olmasını istediğimiz fakat product sürümünde görünmesini istemediğimiz bir html parçası varsa, environment tag helperlar ile belirlenebilir.
@@ -301,7 +301,7 @@ public IActionResult Index(string myParam1,string myParam2,string myParam3)
     - Görünmesini *istemediğimiz* host ortamlarının isimleri yazılır.
     - Core 2.0 ve üstü sürümlerinde vardır.
 
-### 05 - Image Tag Helper
+### 05 - Image Tag Helpers
 
 - `asp-append-version` : Bool
     - Normalde tarayıcılar, statik dosyaları ismine göre lokal cache üzerinde saklarlar.
@@ -329,7 +329,7 @@ public IActionResult Index(string myParam1,string myParam2,string myParam3)
 -->
 ```
 
-### 06 - Partial Tag Helper
+### 06 - Partial Tag Helpers
 
 - Dikkat edilmesi gerekenler : 
     - Bu helper **ASP.NET Core 2.1** sürümünden sonra kullanılabilir.
