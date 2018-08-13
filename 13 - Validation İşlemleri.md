@@ -168,15 +168,16 @@ public decimal Ucret { get; set; }
         - **ErrorMessage** : Eğer gittiği endpointten herhangi bir ifade dönmezse, bu hata mesajı yazdırılır.
     - İstek yaptığı endpointten json olarak `true` veya hata mesajı bekler. True ifadesi gidildiğinde validation yapar, diğer durumlarda validation yapmaz ve hata mesajını yazdırır.
     - Endpoint üzerinden property ismi parametre olarak alınıp kullanılabilir.
-    - **NOT:** Bu metodun çalışması için client-side validation kütüphanelerinin yüklenmesi zorunludur. 
     - Doc : https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation#remote-validation
-    - **NOT:** Eğer database tabloları MVC projesinin dışında başka bir proje içinde oluşturulmuşsa, ilgili proje içine `Microsoft.AspNetCore.Mvc` kütüphanesinin eklenmesi gerekmektedir.
+> - **NOT 1 :** Bu metodun çalışması için client-side validation kütüphanelerinin yüklenmesi zorunludur. 
 
-```
-<ItemGroup>
-  <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.3" />
-</ItemGroup>
-```
+> - **NOT 2 :** Eğer database tabloları MVC projesinin dışında başka bir proje içinde oluşturulmuşsa, ilgili > proje içine `Microsoft.AspNetCore.Mvc` kütüphanesinin eklenmesi gerekmektedir.
+> 
+> ```
+> <ItemGroup>
+>   <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.3" />
+> </ItemGroup>
+> ```
 
 ```cs
 // Model
@@ -226,6 +227,29 @@ namespace WebApplication1.Models
     }
 }
 ```
+
+> - **NOT 3 :** Endpoint üzerinde kontrol edilecek parametre, doldurulan formun input alanındaki `name` ismiyle gönderilecek parametredir. Bu yüzden kullanılan formun name alanına dikkat edilmelidir. 
+>     - Örnek olarak aşağıdaki gibi ViewModel ile kullanılan bir form yapısı varsa, kontrol eden endpoint yapısı şu şekilde olmalıdır:
+> 
+> ```cs
+> <div class="form-group">
+>     <label asp-for="Kullanici.KullaniciAdi"></label>
+>     <input asp-for="Kullanici.KullaniciAdi" class="form-control" />
+>     <span asp-validation-for="Kullanici.KullaniciAdi"></span>
+> </div>
+> ```
+> 
+> ```cs
+> [HttpPost]
+> public IActionResult Check_Kullanici_KullaniciAdi()
+> {
+>     string kullaniciAdi = Request.Form["Kullanici.KullaniciAdi"];
+>     if (check(kullaniciAdi))
+>         return Json(true);
+>     else
+>         return Json($"{kullaniciAdi} daha önceden kullanılmış!");
+> }
+> ```
 
 ### 05 - Custom Error Message
 
