@@ -170,6 +170,13 @@ public decimal Ucret { get; set; }
     - Endpoint üzerinden property ismi parametre olarak alınıp kullanılabilir.
     - **NOT:** Bu metodun çalışması için client-side validation kütüphanelerinin yüklenmesi zorunludur. 
     - Doc : https://docs.microsoft.com/en-us/aspnet/core/mvc/models/validation#remote-validation
+    - **NOT:** Eğer database tabloları MVC projesinin dışında başka bir proje içinde oluşturulmuşsa, ilgili proje içine `Microsoft.AspNetCore.Mvc` kütüphanesinin eklenmesi gerekmektedir.
+
+```
+<ItemGroup>
+  <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.3" />
+</ItemGroup>
+```
 
 ```cs
 // Model
